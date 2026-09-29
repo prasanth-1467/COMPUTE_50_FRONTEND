@@ -1,0 +1,39 @@
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { MainLayout } from '../layouts/MainLayout';
+import { ProtectedRoute } from './ProtectedRoute';
+
+import Home from '../pages/Home';
+import About from '../pages/About';
+import Hackathon from '../pages/Hackathon';
+import Login from '../pages/Login';
+import Register from '../pages/Register';
+import Profile from '../pages/Profile';
+
+export const AppRouter: React.FC = () => {
+  return (
+    <Routes>
+      <Route element={<MainLayout />}>
+        {/* Public Routes */}
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/hackathon" element={<Hackathon />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        {/* Authenticated Route */}
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Fallback redirect to Home */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Route>
+    </Routes>
+  );
+};
