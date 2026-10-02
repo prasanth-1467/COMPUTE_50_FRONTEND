@@ -5,6 +5,7 @@ import { Input } from '../common/Input';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
 import { useAuth } from '../../hooks/useAuth';
+import { useToast } from '../../hooks/useToast';
 
 export const LoginForm: React.FC = () => {
   const [email, setEmail] = useState<string>('');
@@ -14,6 +15,7 @@ export const LoginForm: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const { login } = useAuth();
+  const { addToast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -26,9 +28,11 @@ export const LoginForm: React.FC = () => {
 
     try {
       await login({ email, password });
+      addToast('Welcome back! Login successful.', 'success');
       navigate(from, { replace: true });
     } catch {
       setError('Invalid login credentials. Please try again.');
+      addToast('Login failed. Please check your credentials.', 'error');
     } finally {
       setLoading(false);
     }
@@ -38,6 +42,7 @@ export const LoginForm: React.FC = () => {
     setLoading(true);
     try {
       await login({ email: 'google.user@psgtech.ac.in' });
+      addToast('Welcome back! Signed in with Google.', 'success');
       navigate(from, { replace: true });
     } finally {
       setLoading(false);
@@ -47,8 +52,8 @@ export const LoginForm: React.FC = () => {
   return (
     <Card className="w-full max-w-md mx-auto">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-slate-100">Welcome Back</h2>
-        <p className="text-xs text-slate-400 mt-1">Sign in to manage your team & profile</p>
+        <h2 className="text-2xl font-bold text-[var(--text-primary)]">Welcome Back</h2>
+        <p className="text-xs text-[var(--text-secondary)] mt-1">Sign in to manage your team & profile</p>
       </div>
 
       {error && (
@@ -91,8 +96,10 @@ export const LoginForm: React.FC = () => {
           <div className="text-right">
             <button
               type="button"
-              onClick={() => alert('Mock password reset instructions sent to your email.')}
-              className="text-xs text-blue-400 hover:underline cursor-pointer"
+              onClick={() => {
+                addToast('Password reset instructions sent to your email.', 'info');
+              }}
+              className="text-xs text-[var(--accent)] hover:underline cursor-pointer"
             >
               Forgot password?
             </button>
@@ -112,9 +119,9 @@ export const LoginForm: React.FC = () => {
 
       <div className="relative my-6 text-center">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-slate-800" />
+          <div className="w-full border-t border-[var(--border-color)]" />
         </div>
-        <span className="relative bg-slate-900 px-3 text-xs text-slate-400">OR</span>
+        <span className="relative bg-[var(--bg-surface)] px-3 text-xs text-[var(--text-secondary)]">OR</span>
       </div>
 
       <Button
@@ -127,9 +134,9 @@ export const LoginForm: React.FC = () => {
         Sign in with Google
       </Button>
 
-      <p className="text-xs text-slate-400 text-center mt-6">
+      <p className="text-xs text-[var(--text-secondary)] text-center mt-6">
         Don't have an account?{' '}
-        <Link to="/register" className="text-blue-400 hover:underline font-semibold">
+        <Link to="/register" className="text-[var(--accent)] hover:underline font-semibold">
           Register Team
         </Link>
       </p>

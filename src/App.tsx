@@ -3,6 +3,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { ToastProvider } from './context/ToastContext';
+import { ToastContainer } from './components/common/ToastContainer';
 import { AppRouter } from './routes/AppRouter';
 
 const queryClient = new QueryClient({
@@ -20,9 +22,12 @@ export const App: React.FC = () => {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <AuthProvider>
-          <BrowserRouter>
-            <AppRouter />
-          </BrowserRouter>
+          <ToastProvider>
+            <BrowserRouter>
+              <AppRouter />
+            </BrowserRouter>
+            <ToastContainer />
+          </ToastProvider>
         </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>

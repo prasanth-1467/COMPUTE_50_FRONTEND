@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { User, Mail, Phone, Building, BookOpen, Calendar, Lock, UserPlus } from 'lucide-react';
+import confetti from 'canvas-confetti';
 import { Input } from '../common/Input';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
+import { PasswordStrength } from './PasswordStrength';
 import { useAuth } from '../../hooks/useAuth';
+import { useToast } from '../../hooks/useToast';
 
 export const RegisterForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -21,10 +24,29 @@ export const RegisterForm: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const { register } = useAuth();
+  const { addToast } = useToast();
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const fireConfetti = () => {
+    const defaults = {
+      spread: 360,
+      ticks: 80,
+      gravity: 0.8,
+      decay: 0.92,
+      startVelocity: 25,
+      colors: ['#B6FF00', '#C8FF33', '#65A30D', '#22c55e', '#fbbf24', '#f97316'],
+    };
+
+    confetti({ ...defaults, particleCount: 40, origin: { x: 0.3, y: 0.6 } });
+    confetti({ ...defaults, particleCount: 40, origin: { x: 0.7, y: 0.6 } });
+
+    setTimeout(() => {
+      confetti({ ...defaults, particleCount: 30, origin: { x: 0.5, y: 0.4 }, startVelocity: 35 });
+    }, 200);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -34,9 +56,12 @@ export const RegisterForm: React.FC = () => {
 
     try {
       await register(formData);
-      navigate('/profile');
+      fireConfetti();
+      addToast('🎉 Registration successful! Welcome to Compute 50.', 'success');
+      setTimeout(() => navigate('/profile'), 1200);
     } catch {
       setError('Registration failed. Please check form fields.');
+      addToast('Registration failed. Please try again.', 'error');
     } finally {
       setLoading(false);
     }
@@ -53,7 +78,11 @@ export const RegisterForm: React.FC = () => {
         department: 'CSE',
         year: '3rd Year',
       });
-      navigate('/profile');
+      fireConfetti();
+      addToast('🎉 Registration successful via Google! Welcome to Compute 50.', 'success');
+      setTimeout(() => navigate('/profile'), 1200);
+    } catch {
+      addToast('Google sign-up failed. Please try again.', 'error');
     } finally {
       setLoading(false);
     }
@@ -62,8 +91,8 @@ export const RegisterForm: React.FC = () => {
   return (
     <Card className="w-full max-w-lg mx-auto">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-slate-100">Participant Registration</h2>
-        <p className="text-xs text-slate-400 mt-1">Register now to enter Compute 50 Hackathon</p>
+        <h2 className="text-2xl font-bold text-[var(--text-primary)]">Participant Registration</h2>
+        <p className="text-xs text-[var(--text-secondary)] mt-1">Register now to enter Compute 50 Hackathon</p>
       </div>
 
       {error && (
@@ -129,16 +158,16 @@ export const RegisterForm: React.FC = () => {
           />
 
           <div className="space-y-1.5 text-left">
-            <label className="block text-sm font-medium text-slate-300">Year of Study</label>
+            <label className="block text-sm font-medium text-[var(--text-primary)]">Year of Study</label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[var(--text-secondary)]">
                 <Calendar className="w-4 h-4" />
               </div>
               <select
                 name="year"
                 value={formData.year}
                 onChange={handleChange}
-                className="block w-full rounded-lg bg-slate-900 border border-slate-700 text-slate-100 text-sm pl-10 pr-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+                className="block w-full rounded-lg bg-[var(--bg-surface)] border border-[var(--border-color)] text-[var(--text-primary)] text-sm pl-10 pr-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[var(--accent)] cursor-pointer transition-colors"
               >
                 <option value="1st Year">1st Year</option>
                 <option value="2nd Year">2nd Year</option>
@@ -150,16 +179,19 @@ export const RegisterForm: React.FC = () => {
           </div>
         </div>
 
-        <Input
-          label="Password"
-          name="password"
-          type="password"
-          placeholder="••••••••"
-          value={formData.password}
-          onChange={handleChange}
-          leftIcon={<Lock className="w-4 h-4" />}
-          required
-        />
+        <div>
+          <Input
+            label="Password"
+            name="password"
+            type="password"
+            placeholder="••••••••"
+            value={formData.password}
+            onChange={handleChange}
+            leftIcon={<Lock className="w-4 h-4" />}
+            required
+          />
+          <PasswordStrength password={formData.password} />
+        </div>
 
         <Button
           type="submit"
@@ -174,9 +206,9 @@ export const RegisterForm: React.FC = () => {
 
       <div className="relative my-6 text-center">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-slate-800" />
+          <div className="w-full border-t border-[var(--border-color)]" />
         </div>
-        <span className="relative bg-slate-900 px-3 text-xs text-slate-400">OR</span>
+        <span className="relative bg-[var(--bg-surface)] px-3 text-xs text-[var(--text-secondary)]">OR</span>
       </div>
 
       <Button
@@ -189,9 +221,9 @@ export const RegisterForm: React.FC = () => {
         Sign up with Google
       </Button>
 
-      <p className="text-xs text-slate-400 text-center mt-6">
+      <p className="text-xs text-[var(--text-secondary)] text-center mt-6">
         Already registered?{' '}
-        <Link to="/login" className="text-blue-400 hover:underline font-semibold">
+        <Link to="/login" className="text-[var(--accent)] hover:underline font-semibold">
           Login here
         </Link>
       </p>
