@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { MainLayout } from '../layouts/MainLayout';
 import { ProtectedRoute } from './ProtectedRoute';
 
@@ -9,6 +9,7 @@ import Hackathon from '../pages/Hackathon';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Profile from '../pages/Profile';
+import NotFound from '../pages/NotFound';
 
 export const AppRouter: React.FC = () => {
   return (
@@ -31,8 +32,8 @@ export const AppRouter: React.FC = () => {
           }
         />
 
-        {/* Fallback redirect to Home */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        {/* 404 Page */}
+        <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
   );
