@@ -87,7 +87,7 @@ export const Hero: React.FC = () => {
   };
 
   return (
-    <section className="relative py-12 sm:py-20 overflow-hidden border-b border-[var(--border-color)] bg-transparent transition-colors">
+    <section id="hero" className="relative py-20 md:py-28 overflow-hidden border-b border-[var(--border-color)] bg-transparent transition-colors">
       <Container size="lg">
         <motion.div
           variants={containerVariants}

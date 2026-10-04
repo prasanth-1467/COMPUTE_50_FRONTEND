@@ -7,10 +7,11 @@ import { mockEvents } from '../../data/events';
 import { Calendar, Code, MapPin, UserPlus } from 'lucide-react';
 import { Badge } from '../common/Badge';
 import { Reveal } from '../common/Reveal';
+import { EmptyState } from '../common/EmptyState';
 
 export const EventsSection: React.FC = () => {
   return (
-    <section className="py-20 bg-[var(--bg-main)] border-b border-[var(--border-color)] transition-colors">
+    <section id="events" className="py-20 md:py-28 bg-[var(--bg-main)] border-b border-[var(--border-color)] transition-colors">
       <Container size="lg">
         <Reveal>
           <SectionHeading
@@ -20,48 +21,59 @@ export const EventsSection: React.FC = () => {
           />
         </Reveal>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {mockEvents.map((evt, idx) => (
-            <Reveal key={evt.id} delay={idx * 0.1}>
-              <Card hoverable className="group flex flex-col justify-between h-full">
-                <div>
-                  <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                    <div className="flex items-center gap-2">
-                      <Badge variant="primary">{evt.type}</Badge>
-                      {evt.mode && <Badge variant="outline" className="text-[11px] font-mono">{evt.mode}</Badge>}
+        {mockEvents.length === 0 ? (
+          <Reveal>
+            <EmptyState
+              category="COMPUTE 50 EVENTS"
+              title="Event Schedule & Workshops Announcing Soon"
+              subtitle="Detailed timings for workshops, coding challenges, and keynotes will be updated shortly."
+              icon={<Calendar className="w-7 h-7" />}
+            />
+          </Reveal>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {mockEvents.map((evt, idx) => (
+              <Reveal key={evt.id} delay={idx * 0.1}>
+                <Card hoverable className="flex flex-col justify-between h-full space-y-4">
+                  <div className="space-y-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--border-color)] pb-3">
+                      <div className="flex items-center gap-2">
+                        <Code className="w-5 h-5 text-[var(--accent)]" />
+                        <span className="font-bold text-[var(--text-primary)] text-base">{evt.title}</span>
+                      </div>
+                      <Badge variant="primary" className="text-[11px] uppercase">{evt.type}</Badge>
                     </div>
-                    <div className="flex items-center gap-1.5 text-[13px] text-[var(--text-secondary)] font-medium">
-                      <Calendar className="w-3.5 h-3.5 text-[var(--accent)]" />
-                      <span>{evt.date}</span>
+
+                    <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed">{evt.description}</p>
+
+                    <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-[var(--text-secondary)] pt-1">
+                      <div className="flex items-center gap-1.5">
+                        <Calendar className="w-3.5 h-3.5 text-[var(--accent)]" />
+                        <span>{evt.date}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <MapPin className="w-3.5 h-3.5 text-[var(--accent)]" />
+                        <span>{evt.mode}</span>
+                      </div>
                     </div>
                   </div>
-                  <h3 className="text-lg font-bold text-[var(--text-primary)] mb-2 flex items-center gap-2 group-hover:text-[var(--accent)] transition-colors">
-                    <Code className="w-4 h-4 text-[var(--accent)]" />
-                    {evt.title}
-                  </h3>
-                  <p className="text-[15px] text-[var(--text-secondary)] leading-relaxed mb-4">{evt.description}</p>
-                </div>
-                <div className="pt-3 border-t border-[var(--border-color)] flex flex-wrap items-center justify-between gap-3 text-[13px] font-medium">
-                  <div className="flex items-center gap-3">
-                    <span className="text-[var(--text-secondary)]">
-                      Status: <strong className="text-[var(--accent)]">{evt.status}</strong>
-                    </span>
-                    {evt.mode && (
-                      <span className="text-[var(--text-secondary)] flex items-center gap-1 text-xs">
-                        <MapPin className="w-3 h-3 text-[var(--accent)]" /> {evt.mode}
-                      </span>
-                    )}
+
+                  <div className="pt-2 border-t border-[var(--border-color)] flex items-center justify-between">
+                    <Badge variant={evt.status === 'Ongoing' ? 'success' : 'outline'} className="text-[11px]">
+                      {evt.status}
+                    </Badge>
+
+                    <Link to="/register">
+                      <Button size="sm" variant="outline" leftIcon={<UserPlus className="w-3.5 h-3.5" />}>
+                        Participate
+                      </Button>
+                    </Link>
                   </div>
-                  <Link to="/register">
-                    <Button size="sm" variant="primary" leftIcon={<UserPlus className="w-3.5 h-3.5" />}>
-                      Register
-                    </Button>
-                  </Link>
-                </div>
-              </Card>
-            </Reveal>
-          ))}
-        </div>
+                </Card>
+              </Reveal>
+            ))}
+          </div>
+        )}
       </Container>
     </section>
   );

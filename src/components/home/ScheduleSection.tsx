@@ -44,7 +44,7 @@ export const ScheduleSection: React.FC = () => {
   };
 
   return (
-    <section className="py-20 bg-transparent border-b border-[var(--border-color)] transition-colors">
+    <section id="schedule" className="py-20 md:py-28 bg-transparent border-b border-[var(--border-color)] transition-colors">
       <Container size="lg">
         <SectionHeading
           badge="TIMELINE"

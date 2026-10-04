@@ -5,7 +5,9 @@ import { Card } from '../common/Card';
 import { mockSpeakers } from '../../data/speakers';
 import { Badge } from '../common/Badge';
 import { Reveal } from '../common/Reveal';
+import { EmptyState } from '../common/EmptyState';
 import { motion } from 'framer-motion';
+import { Users } from 'lucide-react';
 
 const getInitials = (name: string) => {
   const parts = name.replace(/^(Dr\.|Mr\.|Mrs\.|Ms\.)\s+/, '').trim().split(' ');
@@ -42,7 +44,7 @@ const SpeakerAvatar: React.FC<{ name: string; image?: string }> = ({ name, image
 
 export const SpeakersSection: React.FC = () => {
   return (
-    <section className="py-20 bg-[var(--bg-main)] border-b border-[var(--border-color)] transition-colors">
+    <section id="speakers" className="py-20 md:py-28 bg-[var(--bg-main)] border-b border-[var(--border-color)] transition-colors">
       <Container size="lg">
         <Reveal>
           <SectionHeading
@@ -52,26 +54,37 @@ export const SpeakersSection: React.FC = () => {
           />
         </Reveal>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {mockSpeakers.map((speaker, idx) => (
-            <Reveal key={speaker.id} delay={idx * 0.08}>
-              <Card hoverable className="group text-center flex flex-col items-center overflow-hidden h-full">
-                <SpeakerAvatar name={speaker.name} image={speaker.image} />
-                <Badge variant={speaker.type === 'judge' ? 'warning' : speaker.type === 'mentor' ? 'outline' : 'primary'} className="mb-2 uppercase text-[10px]">
-                  {speaker.type}
-                </Badge>
-                <h3 className="text-base font-bold text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors">
-                  {speaker.name}
-                </h3>
-                <p className="text-[13px] text-[var(--accent)] font-semibold mb-1">{speaker.role}</p>
-                <p className="text-[13px] text-[var(--text-secondary)] mb-3">{speaker.organization}</p>
-                <p className="text-[13px] text-[var(--text-secondary)] leading-relaxed border-t border-[var(--border-color)] pt-3">
-                  {speaker.bio}
-                </p>
-              </Card>
-            </Reveal>
-          ))}
-        </div>
+        {mockSpeakers.length === 0 ? (
+          <Reveal>
+            <EmptyState
+              category="SPEAKERS & JUDGES"
+              title="Speakers & Judges Announcing Soon"
+              subtitle="We are finalizing our panel of industry leaders and expert mentors."
+              icon={<Users className="w-7 h-7" />}
+            />
+          </Reveal>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {mockSpeakers.map((speaker, idx) => (
+              <Reveal key={speaker.id} delay={idx * 0.08}>
+                <Card hoverable className="group text-center flex flex-col items-center overflow-hidden h-full">
+                  <SpeakerAvatar name={speaker.name} image={speaker.image} />
+                  <Badge variant={speaker.type === 'judge' ? 'warning' : speaker.type === 'mentor' ? 'outline' : 'primary'} className="mb-2 uppercase text-[10px]">
+                    {speaker.type}
+                  </Badge>
+                  <h3 className="text-base font-bold text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors">
+                    {speaker.name}
+                  </h3>
+                  <p className="text-[13px] text-[var(--accent)] font-semibold mb-1">{speaker.role}</p>
+                  <p className="text-[13px] text-[var(--text-secondary)] mb-3">{speaker.organization}</p>
+                  <p className="text-[13px] text-[var(--text-secondary)] leading-relaxed border-t border-[var(--border-color)] pt-3">
+                    {speaker.bio}
+                  </p>
+                </Card>
+              </Reveal>
+            ))}
+          </div>
+        )}
       </Container>
     </section>
   );

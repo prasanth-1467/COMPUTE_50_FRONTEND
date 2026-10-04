@@ -45,7 +45,7 @@ export const PrizePool: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 bg-[var(--bg-main)] border-b border-[var(--border-color)] transition-colors">
+    <section id="prizes" className="py-20 md:py-28 bg-[var(--bg-main)] border-b border-[var(--border-color)] transition-colors">
       <Container size="lg">
         <Reveal>
           <SectionHeading

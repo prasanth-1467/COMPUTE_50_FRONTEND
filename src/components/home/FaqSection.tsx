@@ -15,7 +15,7 @@ export const FaqSection: React.FC = () => {
   };
 
   return (
-    <section className="py-20 bg-[var(--bg-secondary)] border-b border-[var(--border-color)] transition-colors">
+    <section id="faq" className="py-20 md:py-28 bg-[var(--bg-secondary)] border-b border-[var(--border-color)] transition-colors">
       <Container size="lg">
         <Reveal>
           <SectionHeading

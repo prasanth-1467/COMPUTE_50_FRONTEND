@@ -5,11 +5,13 @@ import { mockSponsors } from '../../data/sponsors';
 import { EVENT_CONFIG } from '../../config/event';
 import { Badge } from '../common/Badge';
 import { Reveal } from '../common/Reveal';
+import { EmptyState } from '../common/EmptyState';
 import { motion } from 'framer-motion';
+import { Sparkles } from 'lucide-react';
 
 export const SponsorsSection: React.FC = () => {
   return (
-    <section className="py-20 bg-[var(--bg-secondary)] border-b border-[var(--border-color)] transition-colors">
+    <section id="sponsors" className="py-20 md:py-28 bg-[var(--bg-secondary)] border-b border-[var(--border-color)] transition-colors">
       <Container size="lg">
         <Reveal>
           <SectionHeading
@@ -21,18 +23,12 @@ export const SponsorsSection: React.FC = () => {
 
         {mockSponsors.length === 0 ? (
           <Reveal>
-            <div className="p-8 bg-[var(--bg-surface)] border border-[var(--border-color)] rounded-2xl text-center space-y-3 max-w-xl mx-auto">
-              <span className="inline-block px-3 py-1 bg-[var(--accent-muted)] text-[var(--accent)] font-mono text-xs font-bold rounded-full uppercase">
-                Sponsorships Open
-              </span>
-              <h3 className="text-xl font-bold text-[var(--text-primary)]">Sponsors Announced Soon</h3>
-              <p className="text-[13px] text-[var(--text-secondary)]">
-                Interested in sponsoring Compute 50? Reach out to us at{' '}
-                <a href={`mailto:${EVENT_CONFIG.contactEmail}`} className="text-[var(--accent)] hover:underline font-semibold">
-                  {EVENT_CONFIG.contactEmail}
-                </a>
-              </p>
-            </div>
+            <EmptyState
+              category="SPONSORS & PARTNERS"
+              title="Sponsors & Partners Announcing Soon"
+              subtitle={`We are actively onboarding sponsors for Compute 50. Interested in partnering? Reach out at ${EVENT_CONFIG.contactEmail}`}
+              icon={<Sparkles className="w-7 h-7" />}
+            />
           </Reveal>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
@@ -44,7 +40,8 @@ export const SponsorsSection: React.FC = () => {
                   href={sponsor.website}
                   target="_blank"
                   rel="noreferrer"
-                  className="p-6 bg-[var(--bg-surface)] border border-[var(--border-color)] rounded-xl flex flex-col items-center justify-center text-center hover:border-[var(--accent)] transition-colors group"
+                  className="p-6 bg-[var(--bg-surface)] border border-[var(--border-color)] rounded-xl flex flex-col items-center justify-center text-center hover:border-[var(--accent)] transition-colors group focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
+                  aria-label={`Visit ${sponsor.name} website`}
                 >
                   <img
                     src={sponsor.logo}
