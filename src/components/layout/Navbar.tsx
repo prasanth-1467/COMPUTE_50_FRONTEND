@@ -38,7 +38,7 @@ export const Navbar: React.FC = () => {
     { label: 'Home', path: '/' },
     { label: 'About', path: '/about' },
     { label: 'Hackathon', path: '/hackathon' },
-    { label: 'Profile', path: '/profile' },
+    ...(isAuthenticated ? [{ label: 'Profile', path: '/profile' }] : []),
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -53,7 +53,7 @@ export const Navbar: React.FC = () => {
     >
       {/* Scroll Progress Bar */}
       <motion.div
-        className="absolute top-0 left-0 right-0 h-[2px] bg-[#B6FF00] origin-left z-50"
+        className="absolute top-0 left-0 right-0 h-[2px] bg-[var(--accent)] origin-left z-50"
         style={{ scaleX }}
       />
 
@@ -115,25 +115,29 @@ export const Navbar: React.FC = () => {
                 animate={{ scale: 1, rotate: 0, opacity: 1 }}
                 transition={{ duration: 0.2 }}
               >
-                {theme === 'dark' ? <Sun className="w-4 h-4 text-[#B6FF00]" /> : <Moon className="w-4 h-4 text-slate-800" />}
+                {theme === 'dark' ? <Sun className="w-4 h-4 text-[var(--accent)]" /> : <Moon className="w-4 h-4 text-[var(--text-primary)]" />}
               </motion.div>
             </button>
 
             {isAuthenticated ? (
               <Link to="/profile">
-                <Button variant="outline" size="sm" leftIcon={<UserIcon className="w-4 h-4" />}>
-                  {user?.name || 'Dashboard'}
+                <Button
+                  variant={isActive('/profile') ? 'primary' : 'outline'}
+                  size="sm"
+                  leftIcon={<UserIcon className="w-4 h-4" />}
+                >
+                  {user?.name || 'Profile'}
                 </Button>
               </Link>
             ) : (
               <>
                 <Link to="/login">
-                  <Button variant="ghost" size="sm">
+                  <Button variant={isActive('/login') ? 'primary' : 'ghost'} size="sm">
                     Login
                   </Button>
                 </Link>
                 <Link to="/register">
-                  <Button variant="primary" size="sm">
+                  <Button variant={isActive('/register') ? 'primary' : 'outline'} size="sm">
                     Register
                   </Button>
                 </Link>
@@ -148,7 +152,7 @@ export const Navbar: React.FC = () => {
               className="p-2 rounded-lg border border-[var(--border-color)] text-[var(--text-primary)] bg-[var(--bg-surface)] cursor-pointer"
               aria-label="Toggle theme"
             >
-              {theme === 'dark' ? <Sun className="w-5 h-5 text-[#B6FF00]" /> : <Moon className="w-5 h-5" />}
+              {theme === 'dark' ? <Sun className="w-5 h-5 text-[var(--accent)]" /> : <Moon className="w-5 h-5 text-[var(--text-primary)]" />}
             </button>
 
             <button

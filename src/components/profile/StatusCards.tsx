@@ -30,11 +30,11 @@ export const StatusCards: React.FC<StatusCardsProps> = ({
       <Card className="flex flex-col justify-between space-y-3">
         <div>
           <div className="flex items-center justify-between mb-2">
-            <CheckCircle2 className="w-5 h-5 text-blue-400" />
+            <CheckCircle2 className="w-5 h-5 text-[var(--accent)]" />
             <Badge variant={getBadgeVariant(registrationStatus)}>{registrationStatus}</Badge>
           </div>
-          <h4 className="text-sm font-semibold text-slate-200">Registration Status</h4>
-          <p className="text-xs text-slate-400 mt-1">Hackathon registration verification status.</p>
+          <h4 className="text-[15px] font-semibold text-[var(--text-primary)]">Registration Status</h4>
+          <p className="text-[13px] text-[var(--text-secondary)] mt-1">Hackathon registration verification status.</p>
         </div>
       </Card>
 
@@ -42,17 +42,17 @@ export const StatusCards: React.FC<StatusCardsProps> = ({
       <Card className="flex flex-col justify-between space-y-3">
         <div>
           <div className="flex items-center justify-between mb-2">
-            <CreditCard className="w-5 h-5 text-emerald-400" />
+            <CreditCard className="w-5 h-5 text-emerald-500" />
             <Badge variant={getBadgeVariant(paymentStatus)}>{paymentStatus}</Badge>
           </div>
-          <h4 className="text-sm font-semibold text-slate-200">Payment Status</h4>
-          <p className="text-xs text-slate-400 mt-1">Registration fee status.</p>
+          <h4 className="text-[15px] font-semibold text-[var(--text-primary)]">Payment Status</h4>
+          <p className="text-[13px] text-[var(--text-secondary)] mt-1">Registration fee status.</p>
         </div>
         {receiptUrl && (
           <Button
             variant="outline"
             size="sm"
-            className="w-full text-xs"
+            className="w-full text-[13px]"
             leftIcon={<Download className="w-3.5 h-3.5" />}
             onClick={() => alert('Downloading registration fee receipt...')}
           >
@@ -68,8 +68,8 @@ export const StatusCards: React.FC<StatusCardsProps> = ({
             <Home className="w-5 h-5 text-purple-400" />
             <Badge variant={getBadgeVariant(accommodationStatus)}>{accommodationStatus}</Badge>
           </div>
-          <h4 className="text-sm font-semibold text-slate-200">Accommodation Status</h4>
-          <p className="text-xs text-slate-400 mt-1">Hostel stay status for outstation teams.</p>
+          <h4 className="text-[15px] font-semibold text-[var(--text-primary)]">Accommodation Status</h4>
+          <p className="text-[13px] text-[var(--text-secondary)] mt-1">Hostel stay status for outstation teams.</p>
         </div>
       </Card>
     </div>

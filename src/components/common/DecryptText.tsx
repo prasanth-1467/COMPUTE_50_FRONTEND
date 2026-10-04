@@ -18,7 +18,7 @@ export const DecryptText: React.FC<DecryptTextProps> = ({
   speed = 35,
   scrambleChars = DEFAULT_HEX_SCRAMBLE,
   highlightText,
-  highlightClassName = 'text-[#B6FF00]',
+  highlightClassName = 'text-[var(--accent)]',
   onComplete,
 }) => {
   const [displayText, setDisplayText] = useState<string[]>(() => {
@@ -122,24 +122,51 @@ export const DecryptText: React.FC<DecryptTextProps> = ({
   const highlightEnd =
     highlightStart !== -1 && highlightText ? highlightStart + highlightText.length : -1;
 
+  // Group characters into word tokens so each word stays in inline-block whitespace-nowrap
+  const wordTokens: { startIndex: number; chars: { char: string; index: number }[] }[] = [];
+  let currentWord: { char: string; index: number }[] = [];
+  let wordStart = 0;
+
+  displayText.forEach((char, index) => {
+    if (text[index] === ' ') {
+      if (currentWord.length > 0) {
+        wordTokens.push({ startIndex: wordStart, chars: currentWord });
+        currentWord = [];
+      }
+    } else {
+      if (currentWord.length === 0) wordStart = index;
+      currentWord.push({ char, index });
+    }
+  });
+  if (currentWord.length > 0) {
+    wordTokens.push({ startIndex: wordStart, chars: currentWord });
+  }
+
   return (
     <span className={`inline-block font-mono select-none ${className}`}>
-      {displayText.map((char, index) => {
-        const isHighlighted =
-          highlightStart !== -1 && index >= highlightStart && index < highlightEnd;
-        const isSettled = settledIndices.has(index);
+      {wordTokens.map((word, wIdx) => (
+        <React.Fragment key={wIdx}>
+          {wIdx > 0 && <span>&nbsp;</span>}
+          <span className="inline-block whitespace-nowrap">
+            {word.chars.map(({ char, index }) => {
+              const isHighlighted =
+                highlightStart !== -1 && index >= highlightStart && index < highlightEnd;
+              const isSettled = settledIndices.has(index);
 
-        return (
-          <span
-            key={index}
-            className={`inline-block transition-colors duration-100 ${
-              isHighlighted ? highlightClassName : ''
-            } ${!isSettled && char !== ' ' ? 'opacity-80 text-accent-lime font-mono' : ''}`}
-          >
-            {char === ' ' ? '\u00A0' : char}
+              return (
+                <span
+                  key={index}
+                  className={`inline-block transition-colors duration-100 ${
+                    isHighlighted ? highlightClassName : ''
+                  } ${!isSettled ? 'opacity-80 text-[var(--accent)] font-mono' : ''}`}
+                >
+                  {char}
+                </span>
+              );
+            })}
           </span>
-        );
-      })}
+        </React.Fragment>
+      ))}
     </span>
   );
 };

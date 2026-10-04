@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Code2, Globe, Mail, MapPin, Share2 } from 'lucide-react';
 import { Container } from '../common/Container';
+import { EVENT_CONFIG } from '../../config/event';
 
 export const Footer: React.FC = () => {
   return (
@@ -19,16 +20,16 @@ export const Footer: React.FC = () => {
               </span>
             </Link>
             <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-              National 2-Day Hackathon hosted by the Computer Science and Engineering Association (CSEA) at PSG College of Technology.
+              National 2-Day Hackathon hosted by {EVENT_CONFIG.organizerFull} at {EVENT_CONFIG.college}.
             </p>
             <div className="flex items-center gap-3 text-[var(--text-secondary)]">
               <a href="https://psgtech.edu" target="_blank" rel="noreferrer" className="hover:text-[var(--accent)] transition-colors">
                 <Globe className="w-4 h-4" />
               </a>
-              <a href="mailto:csea@psgtech.ac.in" className="hover:text-[var(--accent)] transition-colors">
+              <a href={`mailto:${EVENT_CONFIG.contactEmail}`} className="hover:text-[var(--accent)] transition-colors">
                 <Mail className="w-4 h-4" />
               </a>
-              <a href="#" className="hover:text-[var(--accent)] transition-colors">
+              <a href={EVENT_CONFIG.whatsappLink} target="_blank" rel="noreferrer" className="hover:text-[var(--accent)] transition-colors">
                 <Share2 className="w-4 h-4" />
               </a>
             </div>
@@ -42,7 +43,7 @@ export const Footer: React.FC = () => {
                 <Link to="/" className="hover:text-[var(--accent)] transition-colors">Home</Link>
               </li>
               <li>
-                <Link to="/about" className="hover:text-[var(--accent)] transition-colors">About PSG Tech & CSEA</Link>
+                <Link to="/about" className="hover:text-[var(--accent)] transition-colors">About {EVENT_CONFIG.collegeShort} & {EVENT_CONFIG.organizerShort}</Link>
               </li>
               <li>
                 <Link to="/hackathon" className="hover:text-[var(--accent)] transition-colors">Hackathon Tracks & Rules</Link>
@@ -51,7 +52,13 @@ export const Footer: React.FC = () => {
                 <Link to="/login" className="hover:text-[var(--accent)] transition-colors">Participant Login</Link>
               </li>
               <li>
-                <Link to="/register" className="hover:text-[var(--accent)] transition-colors">Register Team</Link>
+                <Link to="/register" className="hover:text-[var(--accent)] transition-colors">Register</Link>
+              </li>
+              <li>
+                <a href={EVENT_CONFIG.organizerWebsite} target="_blank" rel="noopener noreferrer" className="hover:text-[var(--accent)] transition-colors inline-flex items-center gap-1">
+                  <span>CSEA Official Website</span>
+                  <Globe className="w-3 h-3" />
+                </a>
               </li>
             </ul>
           </div>
@@ -60,9 +67,9 @@ export const Footer: React.FC = () => {
           <div className="space-y-3">
             <h4 className="text-[var(--text-primary)] font-semibold text-xs uppercase tracking-wider">Event Details</h4>
             <ul className="space-y-2 text-xs">
-              <li className="text-[var(--text-secondary)]">Event Mode: In-Person / On-Campus</li>
-              <li className="text-[var(--text-secondary)]">Duration: 2 Continuous Days</li>
-              <li className="text-[var(--text-secondary)]">Team Size: 2 - 4 Members</li>
+              <li className="text-[var(--text-secondary)]">Event Mode: Round 1 Online · Finals at PSG Tech</li>
+              <li className="text-[var(--text-secondary)]">Duration: {EVENT_CONFIG.duration}</li>
+              <li className="text-[var(--text-secondary)]">Team Size: {EVENT_CONFIG.teamSize}</li>
               <li className="text-[var(--text-secondary)]">Eligibility: All College Students</li>
             </ul>
           </div>
@@ -73,11 +80,11 @@ export const Footer: React.FC = () => {
             <div className="space-y-2 text-xs">
               <div className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-[var(--accent)] shrink-0 mt-0.5" />
-                <span>Department of CSE, PSG College of Technology, Peelamedu, Coimbatore - 641004</span>
+                <span>{EVENT_CONFIG.venueFull}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-[var(--accent)] shrink-0" />
-                <span>csea@psgtech.ac.in</span>
+                <span>{EVENT_CONFIG.contactEmail}</span>
               </div>
             </div>
           </div>
@@ -85,8 +92,7 @@ export const Footer: React.FC = () => {
 
         {/* Bottom copyright */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-[var(--text-secondary)] gap-4">
-          <p>© {new Date().getFullYear()} Compute 50 — CSEA, PSG Tech. All rights reserved.</p>
-          <p className="text-[var(--text-secondary)]">Frontend Foundation Built for Hackathon Portal</p>
+          <p>{EVENT_CONFIG.footerCopyright}</p>
         </div>
       </Container>
     </footer>

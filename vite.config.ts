@@ -9,6 +9,9 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  server: {
+    allowedHosts: ['subside-punch-alfalfa.ngrok-free.dev'],
+  },
   resolve: {
     alias: {
       '@': path.resolve(import.meta.dirname, './src'),

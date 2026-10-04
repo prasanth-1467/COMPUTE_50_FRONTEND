@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface Particle {
   x: number;
@@ -11,50 +11,76 @@ interface Particle {
 }
 
 const PARTICLE_CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz{}[]<>/\\#@$%&*+=;:~^!?';
-const PARTICLE_COUNT = 100;
 
 export const ParticleBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
   const animFrameRef = useRef<number>(0);
   const mouseRef = useRef<{ x: number; y: number }>({ x: -1000, y: -1000 });
-
-  const createParticle = useCallback((width: number, height: number): Particle => {
-    return {
-      x: Math.random() * width,
-      y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.4,
-      vy: (Math.random() - 0.5) * 0.4,
-      size: Math.random() * 10 + 8,
-      alpha: Math.random() * 0.3 + 0.1,
-      char: PARTICLE_CHARS[Math.floor(Math.random() * PARTICLE_CHARS.length)],
-    };
-  }, []);
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
   useEffect(() => {
+    // 1. Check prefers-reduced-motion
+    const prefersReducedMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (prefersReducedMotion) {
+      setIsDisabled(true);
+      return;
+    }
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const prefersReducedMotion =
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) return;
+    // 2. Determine adaptive particle count (screen width < 768px or hardwareConcurrency <= 4)
+    const isSmallScreen = window.innerWidth < 768;
+    const isLowConcurrency =
+      typeof navigator !== 'undefined' &&
+      typeof navigator.hardwareConcurrency === 'number' &&
+      navigator.hardwareConcurrency <= 4;
 
-    const resize = () => {
+    const particleCount = isSmallScreen || isLowConcurrency ? 35 : 75;
+
+    let width = 0;
+    let height = 0;
+    let dpr = 1;
+
+    const updateCanvasDimensions = () => {
       const parent = canvas.parentElement;
       if (!parent) return;
-      canvas.width = parent.clientWidth;
-      canvas.height = parent.clientHeight;
+
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = parent.clientWidth;
+      height = parent.clientHeight;
+
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+
+      // Re-initialize particles for new bounds
+      particlesRef.current = Array.from({ length: particleCount }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        size: Math.random() * 8 + 8,
+        alpha: Math.random() * 0.25 + 0.1,
+        char: PARTICLE_CHARS[Math.floor(Math.random() * PARTICLE_CHARS.length)],
+      }));
     };
 
-    resize();
+    let resizeTimeout: ReturnType<typeof setTimeout>;
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(updateCanvasDimensions, 150);
+    };
 
-    // Init particles
-    particlesRef.current = Array.from({ length: PARTICLE_COUNT }, () =>
-      createParticle(canvas.width, canvas.height)
-    );
+    updateCanvasDimensions();
 
     const handleMouseMove = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
@@ -65,66 +91,89 @@ export const ParticleBackground: React.FC = () => {
       mouseRef.current = { x: -1000, y: -1000 };
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
     document.addEventListener('mouseleave', handleMouseLeave);
 
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // 3. Animation loop with ~30fps capping & tab visibility pause
+    let lastTime = performance.now();
+    const fpsInterval = 1000 / 30; // ~33.3ms
 
-      const isDark = document.documentElement.classList.contains('dark');
-      const textColor = isDark ? '182, 255, 0' : '101, 163, 13';
+    const animate = (now: number) => {
+      if (document.hidden) {
+        animFrameRef.current = requestAnimationFrame(animate);
+        return;
+      }
 
-      particlesRef.current.forEach((p) => {
-        // Mouse repulsion
-        const dx = p.x - mouseRef.current.x;
-        const dy = p.y - mouseRef.current.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 120) {
-          const force = (120 - dist) / 120;
-          p.vx += (dx / dist) * force * 0.3;
-          p.vy += (dy / dist) * force * 0.3;
-        }
+      const elapsed = now - lastTime;
 
-        // Damping
-        p.vx *= 0.99;
-        p.vy *= 0.99;
+      if (elapsed >= fpsInterval) {
+        lastTime = now - (elapsed % fpsInterval);
 
-        p.x += p.vx;
-        p.y += p.vy;
+        ctx.save();
+        ctx.scale(dpr, dpr);
+        ctx.clearRect(0, 0, width, height);
 
-        // Wrap around
-        if (p.x < -20) p.x = canvas.width + 20;
-        if (p.x > canvas.width + 20) p.x = -20;
-        if (p.y < -20) p.y = canvas.height + 20;
-        if (p.y > canvas.height + 20) p.y = -20;
+        const isDark =
+          document.documentElement.classList.contains('dark') ||
+          document.documentElement.getAttribute('data-theme') === 'dark';
+        const textColor = isDark ? '182, 255, 0' : '63, 98, 18';
 
-        ctx.font = `${p.size}px 'Courier New', monospace`;
-        ctx.fillStyle = `rgba(${textColor}, ${p.alpha})`;
-        ctx.fillText(p.char, p.x, p.y);
+        const particles = particlesRef.current;
+        const count = particles.length;
 
-        // Randomly change character
-        if (Math.random() < 0.005) {
-          p.char = PARTICLE_CHARS[Math.floor(Math.random() * PARTICLE_CHARS.length)];
-        }
-      });
+        for (let i = 0; i < count; i++) {
+          const p = particles[i];
 
-      // Draw connections between close particles
-      for (let i = 0; i < particlesRef.current.length; i++) {
-        for (let j = i + 1; j < particlesRef.current.length; j++) {
-          const a = particlesRef.current[i];
-          const b = particlesRef.current[j];
-          const dx = a.x - b.x;
-          const dy = a.y - b.y;
+          // Mouse repulsion
+          const dx = p.x - mouseRef.current.x;
+          const dy = p.y - mouseRef.current.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 140) {
-            ctx.strokeStyle = `rgba(${textColor}, ${0.15 * (1 - dist / 140)})`;
-            ctx.lineWidth = 0.5;
-            ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
-            ctx.stroke();
+          if (dist < 100) {
+            const force = (100 - dist) / 100;
+            p.vx += (dx / dist) * force * 0.3;
+            p.vy += (dy / dist) * force * 0.3;
+          }
+
+          p.vx *= 0.98;
+          p.vy *= 0.98;
+
+          p.x += p.vx;
+          p.y += p.vy;
+
+          if (p.x < -20) p.x = width + 20;
+          if (p.x > width + 20) p.x = -20;
+          if (p.y < -20) p.y = height + 20;
+          if (p.y > height + 20) p.y = -20;
+
+          ctx.font = `${p.size}px 'Courier New', monospace`;
+          ctx.fillStyle = `rgba(${textColor}, ${p.alpha})`;
+          ctx.fillText(p.char, p.x, p.y);
+
+          if (Math.random() < 0.005) {
+            p.char = PARTICLE_CHARS[Math.floor(Math.random() * PARTICLE_CHARS.length)];
           }
         }
+
+        // Connections between close particles
+        for (let i = 0; i < count; i++) {
+          for (let j = i + 1; j < count; j++) {
+            const a = particles[i];
+            const b = particles[j];
+            const dx = a.x - b.x;
+            const dy = a.y - b.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 120) {
+              ctx.strokeStyle = `rgba(${textColor}, ${0.12 * (1 - dist / 120)})`;
+              ctx.lineWidth = 0.5;
+              ctx.beginPath();
+              ctx.moveTo(a.x, a.y);
+              ctx.lineTo(b.x, b.y);
+              ctx.stroke();
+            }
+          }
+        }
+
+        ctx.restore();
       }
 
       animFrameRef.current = requestAnimationFrame(animate);
@@ -132,16 +181,26 @@ export const ParticleBackground: React.FC = () => {
 
     animFrameRef.current = requestAnimationFrame(animate);
 
-    const resizeObserver = new ResizeObserver(resize);
-    resizeObserver.observe(canvas.parentElement!);
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        lastTime = performance.now();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('resize', handleResize, { passive: true });
 
     return () => {
       cancelAnimationFrame(animFrameRef.current);
+      clearTimeout(resizeTimeout);
       window.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseleave', handleMouseLeave);
-      resizeObserver.disconnect();
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('resize', handleResize);
     };
-  }, [createParticle]);
+  }, []);
+
+  if (isDisabled) return null;
 
   return (
     <canvas

@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react';
 interface ContainerProps {
   children: ReactNode;
   className?: string;
-  size?: 'sm' | 'md' | 'lg' | 'full';
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
 }
 
 export const Container: React.FC<ContainerProps> = ({
@@ -12,9 +12,10 @@ export const Container: React.FC<ContainerProps> = ({
   size = 'lg',
 }) => {
   const sizeClasses = {
-    sm: 'max-w-3xl',
-    md: 'max-w-5xl',
-    lg: 'max-w-7xl',
+    sm: 'max-w-md',
+    md: 'max-w-3xl',
+    lg: 'max-w-[1200px]',
+    xl: 'max-w-7xl',
     full: 'max-w-full',
   };
 

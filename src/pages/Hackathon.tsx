@@ -10,7 +10,7 @@ import { ScheduleSection } from '../components/home/ScheduleSection';
 
 export const Hackathon: React.FC = () => {
   return (
-    <div className="py-16 bg-slate-950 min-h-screen">
+    <div className="py-16 bg-[var(--bg-main)] min-h-screen transition-colors">
       <Container size="lg">
         <SectionHeading
           badge="HACKATHON DETAILS"
@@ -18,7 +18,7 @@ export const Hackathon: React.FC = () => {
           subtitle="Everything you need to compete, build, and submit your project successfully."
         />
 
-        <div className="space-y-12 max-w-5xl mx-auto">
+        <div className="space-y-12">
           <HackathonOverview />
           <TracksSection />
           <ProblemStatements />

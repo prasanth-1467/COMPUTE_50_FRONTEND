@@ -8,6 +8,7 @@ import { Card } from '../common/Card';
 import { PasswordStrength } from './PasswordStrength';
 import { useAuth } from '../../hooks/useAuth';
 import { useToast } from '../../hooks/useToast';
+import { GoogleIcon } from '../common/GoogleIcon';
 
 export const RegisterForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -217,6 +218,7 @@ export const RegisterForm: React.FC = () => {
         fullWidth
         onClick={handleGoogleSignup}
         disabled={loading}
+        leftIcon={<GoogleIcon className="w-4 h-4" />}
       >
         Sign up with Google
       </Button>

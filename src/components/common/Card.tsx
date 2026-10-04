@@ -15,15 +15,15 @@ export const Card: React.FC<CardProps> = ({
   hoverable = false,
 }) => {
   const hoverClasses = hoverable
-    ? 'hover:border-[var(--accent)] hover:shadow-md cursor-pointer'
+    ? 'hover:border-[var(--accent)] hover:shadow-lg cursor-pointer'
     : '';
 
   return (
     <motion.div
       onClick={onClick}
-      whileHover={hoverable ? { y: -3 } : undefined}
+      whileHover={hoverable ? { y: -4 } : undefined}
       transition={{ duration: 0.2, ease: 'easeOut' }}
-      className={`bg-[var(--bg-surface)] border border-[var(--border-color)] rounded-xl p-6 shadow-xs backdrop-blur-xs transition-colors ${hoverClasses} ${className}`}
+      className={`bg-[var(--bg-surface)] border border-[var(--border-color)] rounded-2xl p-6 shadow-xs backdrop-blur-xs transition-all duration-200 ${hoverClasses} ${className}`}
     >
       {children}
     </motion.div>
@@ -38,12 +38,12 @@ export const CardHeader: React.FC<{ children: ReactNode; className?: string }> =
 export const CardTitle: React.FC<{ children: ReactNode; className?: string }> = ({
   children,
   className = '',
-}) => <h3 className={`text-lg font-bold text-[var(--text-primary)] ${className}`}>{children}</h3>;
+}) => <h3 className={`text-xl font-bold text-[var(--text-primary)] ${className}`}>{children}</h3>;
 
 export const CardContent: React.FC<{ children: ReactNode; className?: string }> = ({
   children,
   className = '',
-}) => <div className={`text-[var(--text-secondary)] ${className}`}>{children}</div>;
+}) => <div className={`text-[15px] text-[var(--text-secondary)] leading-relaxed ${className}`}>{children}</div>;
 
 export const CardFooter: React.FC<{ children: ReactNode; className?: string }> = ({
   children,

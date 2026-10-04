@@ -15,9 +15,9 @@ export const KeyFacts: React.FC = () => {
     },
     {
       icon: <Monitor className="w-8 h-8 text-[var(--accent)]" />,
-      label: 'Hackathon Mode',
-      value: 'In-Person (Offline)',
-      description: 'On-campus continuous hackathon at PSG Tech.',
+      label: 'Event Format',
+      value: 'Round 1 Online · Finals at PSG Tech',
+      description: 'First round online, shortlisted teams invited to PSG Tech campus.',
     },
     {
       icon: <MapPin className="w-8 h-8 text-[var(--accent)]" />,
@@ -51,11 +51,11 @@ export const KeyFacts: React.FC = () => {
                 <div className="p-3 bg-[var(--bg-main)] rounded-xl border border-[var(--border-color)] mb-4">
                   {fact.icon}
                 </div>
-                <span className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider mb-1">
+                <span className="text-[13px] font-semibold text-[var(--text-secondary)] uppercase font-mono tracking-wider mb-1">
                   {fact.label}
                 </span>
                 <h3 className="text-lg font-bold text-[var(--text-primary)] mb-2">{fact.value}</h3>
-                <p className="text-xs text-[var(--text-secondary)]">{fact.description}</p>
+                <p className="text-[13px] text-[var(--text-secondary)]">{fact.description}</p>
               </Card>
             </Reveal>
           ))}

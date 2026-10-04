@@ -52,9 +52,9 @@ export const TracksSection: React.FC = () => {
                   <h3 className="text-lg font-bold text-[var(--text-primary)] mb-2 group-hover:text-[var(--accent)] transition-colors">
                     {track.title}
                   </h3>
-                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-4">{track.description}</p>
+                  <p className="text-[15px] text-[var(--text-secondary)] leading-relaxed mb-4">{track.description}</p>
                 </div>
-                <div className="pt-3 border-t border-[var(--border-color)] flex items-center justify-between text-xs font-semibold text-[var(--text-secondary)] group-hover:text-[var(--text-primary)]">
+                <div className="pt-3 border-t border-[var(--border-color)] flex items-center justify-between text-[13px] font-semibold text-[var(--text-secondary)] group-hover:text-[var(--text-primary)]">
                   <span>Explore track details</span>
                   <motion.div initial={{ x: 0 }} whileHover={{ x: 4 }} className="inline-flex items-center text-[var(--accent)]">
                     <ArrowRight className="w-4 h-4" />

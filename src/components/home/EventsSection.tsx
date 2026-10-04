@@ -1,12 +1,12 @@
-import React from 'react';
+import { Link } from 'react-router-dom';
 import { Container } from '../common/Container';
 import { SectionHeading } from '../common/SectionHeading';
 import { Card } from '../common/Card';
+import { Button } from '../common/Button';
 import { mockEvents } from '../../data/events';
-import { Calendar, Code, ArrowRight } from 'lucide-react';
+import { Calendar, Code, MapPin, UserPlus } from 'lucide-react';
 import { Badge } from '../common/Badge';
 import { Reveal } from '../common/Reveal';
-import { motion } from 'framer-motion';
 
 export const EventsSection: React.FC = () => {
   return (
@@ -25,9 +25,12 @@ export const EventsSection: React.FC = () => {
             <Reveal key={evt.id} delay={idx * 0.1}>
               <Card hoverable className="group flex flex-col justify-between h-full">
                 <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <Badge variant="primary">{evt.type}</Badge>
-                    <div className="flex items-center gap-1.5 text-xs text-[var(--text-secondary)] font-medium">
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                    <div className="flex items-center gap-2">
+                      <Badge variant="primary">{evt.type}</Badge>
+                      {evt.mode && <Badge variant="outline" className="text-[11px] font-mono">{evt.mode}</Badge>}
+                    </div>
+                    <div className="flex items-center gap-1.5 text-[13px] text-[var(--text-secondary)] font-medium">
                       <Calendar className="w-3.5 h-3.5 text-[var(--accent)]" />
                       <span>{evt.date}</span>
                     </div>
@@ -36,15 +39,24 @@ export const EventsSection: React.FC = () => {
                     <Code className="w-4 h-4 text-[var(--accent)]" />
                     {evt.title}
                   </h3>
-                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-4">{evt.description}</p>
+                  <p className="text-[15px] text-[var(--text-secondary)] leading-relaxed mb-4">{evt.description}</p>
                 </div>
-                <div className="pt-3 border-t border-[var(--border-color)] flex items-center justify-between text-xs font-medium">
-                  <span className="text-[var(--text-secondary)]">
-                    Status: <strong className="text-[var(--accent)]">{evt.status}</strong>
-                  </span>
-                  <motion.div initial={{ x: 0 }} whileHover={{ x: 4 }} className="inline-flex items-center text-[var(--accent)]">
-                    <ArrowRight className="w-4 h-4" />
-                  </motion.div>
+                <div className="pt-3 border-t border-[var(--border-color)] flex flex-wrap items-center justify-between gap-3 text-[13px] font-medium">
+                  <div className="flex items-center gap-3">
+                    <span className="text-[var(--text-secondary)]">
+                      Status: <strong className="text-[var(--accent)]">{evt.status}</strong>
+                    </span>
+                    {evt.mode && (
+                      <span className="text-[var(--text-secondary)] flex items-center gap-1 text-xs">
+                        <MapPin className="w-3 h-3 text-[var(--accent)]" /> {evt.mode}
+                      </span>
+                    )}
+                  </div>
+                  <Link to="/register">
+                    <Button size="sm" variant="primary" leftIcon={<UserPlus className="w-3.5 h-3.5" />}>
+                      Register
+                    </Button>
+                  </Link>
                 </div>
               </Card>
             </Reveal>

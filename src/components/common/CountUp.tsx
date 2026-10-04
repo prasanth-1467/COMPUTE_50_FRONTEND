@@ -14,20 +14,22 @@ export const CountUp: React.FC<CountUpProps> = ({
   end,
   prefix = '',
   suffix = '',
-  duration = 1.8,
+  duration = 1.5,
   className = '',
   formatNumber,
 }) => {
   const [count, setCount] = useState<number>(0);
   const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true, margin: '-30px' });
+  const isInView = useInView(ref, { once: true, margin: '-20px' });
   const shouldReduceMotion = useReducedMotion();
+  const hasCompletedRef = useRef<boolean>(false);
 
   useEffect(() => {
-    if (!isInView) return;
+    if (!isInView || hasCompletedRef.current) return;
 
     if (shouldReduceMotion) {
       setCount(end);
+      hasCompletedRef.current = true;
       return;
     }
 
@@ -37,14 +39,16 @@ export const CountUp: React.FC<CountUpProps> = ({
     const step = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / (duration * 1000), 1);
-      // Ease out cubic
       const easeOutProgress = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.floor(easeOutProgress * end));
+      const currentVal = Math.floor(easeOutProgress * end);
+
+      setCount(currentVal);
 
       if (progress < 1) {
         frameId = requestAnimationFrame(step);
       } else {
         setCount(end);
+        hasCompletedRef.current = true;
       }
     };
 
@@ -52,6 +56,9 @@ export const CountUp: React.FC<CountUpProps> = ({
 
     return () => {
       if (frameId) cancelAnimationFrame(frameId);
+      // Guarantee exact final value on unmount/cleanup
+      setCount(end);
+      hasCompletedRef.current = true;
     };
   }, [isInView, end, duration, shouldReduceMotion]);
 

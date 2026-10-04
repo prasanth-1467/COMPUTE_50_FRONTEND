@@ -7,6 +7,7 @@ import { BottomNav } from '../components/layout/BottomNav';
 import { BackToTop } from '../components/common/BackToTop';
 import { CursorGlow } from '../components/common/CursorGlow';
 import { AnnouncementPopup } from '../components/common/AnnouncementPopup';
+import { StickyMobileRegister } from '../components/layout/StickyMobileRegister';
 import { ParticleBackground } from '../components/home/ParticleBackground';
 
 export const MainLayout: React.FC = () => {
@@ -33,6 +34,7 @@ export const MainLayout: React.FC = () => {
       </main>
       <Footer />
       <BackToTop />
+      <StickyMobileRegister />
       <BottomNav />
     </div>
   );

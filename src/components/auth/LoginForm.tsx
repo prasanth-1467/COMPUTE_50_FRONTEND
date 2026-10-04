@@ -7,6 +7,8 @@ import { Card } from '../common/Card';
 import { useAuth } from '../../hooks/useAuth';
 import { useToast } from '../../hooks/useToast';
 
+import { GoogleIcon } from '../common/GoogleIcon';
+
 export const LoginForm: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -130,6 +132,7 @@ export const LoginForm: React.FC = () => {
         fullWidth
         onClick={handleGoogleLogin}
         disabled={loading}
+        leftIcon={<GoogleIcon className="w-4 h-4" />}
       >
         Sign in with Google
       </Button>
@@ -137,7 +140,7 @@ export const LoginForm: React.FC = () => {
       <p className="text-xs text-[var(--text-secondary)] text-center mt-6">
         Don't have an account?{' '}
         <Link to="/register" className="text-[var(--accent)] hover:underline font-semibold">
-          Register Team
+          Register
         </Link>
       </p>
     </Card>

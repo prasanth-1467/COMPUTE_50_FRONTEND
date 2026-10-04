@@ -35,11 +35,11 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team, onCreateTeam }) 
   if (!team) {
     return (
       <Card className="space-y-4">
-        <div className="flex items-center gap-3 text-slate-100">
-          <Users className="w-6 h-6 text-blue-400" />
+        <div className="flex items-center gap-3 text-[var(--text-primary)]">
+          <Users className="w-6 h-6 text-[var(--accent)]" />
           <h3 className="text-xl font-bold">Hackathon Team</h3>
         </div>
-        <p className="text-xs text-slate-400">
+        <p className="text-[15px] text-[var(--text-secondary)]">
           You are currently not part of any registered team. Create a team or ask your leader for a join code.
         </p>
 
@@ -72,17 +72,17 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team, onCreateTeam }) 
 
   return (
     <Card className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[var(--border-color)] pb-4">
         <div>
-          <span className="text-xs text-slate-400 uppercase font-semibold">Registered Team</span>
-          <h3 className="text-xl font-bold text-slate-100">{team.name}</h3>
+          <span className="text-[13px] text-[var(--text-secondary)] uppercase font-semibold">Registered Team</span>
+          <h3 className="text-xl font-bold text-[var(--text-primary)]">{team.name}</h3>
         </div>
-        <div className="flex items-center gap-2 bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800 text-xs font-mono">
-          <span className="text-slate-400">Join Code:</span>
-          <span className="text-blue-400 font-bold">{team.code}</span>
+        <div className="flex items-center gap-2 bg-[var(--bg-secondary)] px-3 py-1.5 rounded-lg border border-[var(--border-color)] text-[13px] font-mono">
+          <span className="text-[var(--text-secondary)]">Join Code:</span>
+          <span className="text-[var(--accent)] font-bold">{team.code}</span>
           <button
             onClick={handleCopyCode}
-            className="p-1 text-slate-400 hover:text-white transition-colors cursor-pointer"
+            className="p-1 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
             aria-label="Copy team code"
           >
             {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
@@ -91,7 +91,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team, onCreateTeam }) 
       </div>
 
       <div className="space-y-3">
-        <div className="flex items-center justify-between text-xs text-slate-400">
+        <div className="flex items-center justify-between text-[13px] text-[var(--text-secondary)] font-medium">
           <span>Team Members ({team.members.length} / {team.maxMembers})</span>
           <span>Max Capacity: 4</span>
         </div>
@@ -100,18 +100,18 @@ export const TeamSection: React.FC<TeamSectionProps> = ({ team, onCreateTeam }) 
           {team.members.map((member) => (
             <div
               key={member.id}
-              className="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between text-xs"
+              className="p-3 bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)] flex items-center justify-between text-[13px]"
             >
               <div className="space-y-0.5">
-                <span className="font-semibold text-slate-200 block">{member.name}</span>
-                <span className="text-[11px] text-slate-400 block">{member.email}</span>
+                <span className="font-semibold text-[var(--text-primary)] block">{member.name}</span>
+                <span className="text-[12px] text-[var(--text-secondary)] block">{member.email}</span>
               </div>
               {member.role === 'Leader' ? (
-                <Badge variant="warning" className="text-[10px]">
+                <Badge variant="warning" className="text-[11px]">
                   <Crown className="w-3 h-3 mr-1 inline text-amber-400" /> Team Leader
                 </Badge>
               ) : (
-                <Badge variant="secondary" className="text-[10px]">Member</Badge>
+                <Badge variant="secondary" className="text-[11px]">Member</Badge>
               )}
             </div>
           ))}

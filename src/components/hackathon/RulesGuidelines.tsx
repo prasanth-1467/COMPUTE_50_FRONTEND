@@ -13,14 +13,14 @@ export const RulesGuidelines: React.FC = () => {
 
   return (
     <Card className="space-y-4">
-      <div className="flex items-center gap-2 text-slate-100">
-        <ShieldAlert className="w-6 h-6 text-blue-400" />
+      <div className="flex items-center gap-2 text-[var(--text-primary)]">
+        <ShieldAlert className="w-6 h-6 text-[var(--accent)]" />
         <h3 className="text-xl font-bold">Hackathon Rules & Guidelines</h3>
       </div>
-      <ul className="space-y-3 text-xs sm:text-sm text-slate-300">
+      <ul className="space-y-3 text-[15px] text-[var(--text-secondary)] leading-relaxed">
         {rules.map((rule, idx) => (
           <li key={idx} className="flex items-start gap-3">
-            <CheckCircle2 className="w-5 h-5 text-blue-400 shrink-0 mt-0.5" />
+            <CheckCircle2 className="w-5 h-5 text-[var(--accent)] shrink-0 mt-0.5" />
             <span>{rule}</span>
           </li>
         ))}

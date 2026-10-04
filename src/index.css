@@ -7,7 +7,7 @@
     --bg-surface: #FFFFFF;
     --border-color: #E4E4E7;
     --text-primary: #09090B;
-    --text-secondary: #71717A;
+    --text-secondary: #52525B;
     --accent: #65A30D;
     --accent-hover: #4D7C0F;
     --accent-text: #FFFFFF;
@@ -31,9 +31,15 @@
     min-height: 100vh;
     background-color: var(--bg-main);
     color: var(--text-primary);
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
     overflow-x: hidden;
     transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  .font-mono {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   }
 }
 

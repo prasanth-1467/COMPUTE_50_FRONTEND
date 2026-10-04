@@ -57,7 +57,7 @@ export const FaqSection: React.FC = () => {
                         transition={{ duration: 0.25, ease: 'easeInOut' }}
                         className="overflow-hidden"
                       >
-                        <div className="px-5 pb-5 text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed border-t border-[var(--border-color)] pt-3">
+                        <div className="px-5 pb-5 text-[15px] text-[var(--text-secondary)] leading-relaxed border-t border-[var(--border-color)] pt-3">
                           {faq.answer}
                         </div>
                       </motion.div>
