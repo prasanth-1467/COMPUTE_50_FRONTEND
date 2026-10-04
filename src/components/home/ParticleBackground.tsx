@@ -21,7 +21,7 @@ function generate50TargetPoints(width: number, height: number, count: number): {
   if (typeof document === 'undefined') return Array.from({ length: count }, () => ({ x: width / 2, y: height / 2 }));
 
   const offCanvas = document.createElement('canvas');
-  const size = Math.min(width, height) * 0.28;
+  const size = Math.min(width, height) * 0.32;
   const offWidth = Math.round(size * 2.2);
   const offHeight = Math.round(size * 1.2);
   offCanvas.width = offWidth;
@@ -33,7 +33,7 @@ function generate50TargetPoints(width: number, height: number, count: number): {
   }
 
   offCtx.fillStyle = '#ffffff';
-  offCtx.font = `bold ${Math.round(size * 0.85)}px 'JetBrains Mono', 'Courier New', monospace`;
+  offCtx.font = `bold ${Math.round(size * 0.9)}px 'JetBrains Mono', 'Courier New', monospace`;
   offCtx.textAlign = 'center';
   offCtx.textBaseline = 'middle';
   offCtx.fillText('50', offWidth / 2, offHeight / 2);
@@ -48,7 +48,7 @@ function generate50TargetPoints(width: number, height: number, count: number): {
       const alpha = pixels[(y * offWidth + x) * 4 + 3];
       if (alpha > 128) {
         const screenX = width / 2 - offWidth / 2 + x;
-        const screenY = height * 0.3 - offHeight / 2 + y;
+        const screenY = height * 0.32 - offHeight / 2 + y;
         validPoints.push({ x: screenX, y: screenY });
       }
     }
@@ -98,7 +98,7 @@ export const ParticleBackground: React.FC = () => {
       typeof navigator.hardwareConcurrency === 'number' &&
       navigator.hardwareConcurrency <= 4;
 
-    const particleCount = isSmallScreen || isLowConcurrency ? 35 : 75;
+    const particleCount = isSmallScreen || isLowConcurrency ? 45 : 85;
 
     let width = 0;
     let height = 0;
@@ -132,10 +132,10 @@ export const ParticleBackground: React.FC = () => {
           startY: sy,
           targetX: target.x,
           targetY: target.y,
-          vx: (Math.random() - 0.5) * 0.4,
-          vy: (Math.random() - 0.5) * 0.4,
-          size: Math.random() * 8 + 9,
-          alpha: Math.random() * 0.2 + 0.1,
+          vx: (Math.random() - 0.5) * 0.5,
+          vy: (Math.random() - 0.5) * 0.5,
+          size: Math.random() * 10 + 13, // Boosted size: 13px - 23px
+          alpha: Math.random() * 0.35 + 0.45, // Boosted alpha: 0.45 - 0.80
           char: PARTICLE_CHARS[Math.floor(Math.random() * PARTICLE_CHARS.length)],
           dispersed: false,
         };
@@ -185,8 +185,11 @@ export const ParticleBackground: React.FC = () => {
 
         const isDark =
           document.documentElement.classList.contains('dark') ||
-          document.documentElement.getAttribute('data-theme') === 'dark';
-        const textColor = isDark ? '182, 255, 0' : '63, 98, 18';
+          !document.documentElement.classList.contains('light');
+
+        // Color & Glow Tokens
+        const textColor = isDark ? '182, 255, 0' : '77, 124, 15';
+        const glowColor = isDark ? 'rgba(182, 255, 0, 0.75)' : 'rgba(101, 163, 13, 0.5)';
 
         const timeSinceStart = now - startTime;
         const particles = particlesRef.current;
@@ -208,7 +211,7 @@ export const ParticleBackground: React.FC = () => {
           } else if (isDispersing && !p.dispersed) {
             // Scatter outward impulse once at transition
             const angle = Math.random() * Math.PI * 2;
-            const force = Math.random() * 2 + 1;
+            const force = Math.random() * 2.5 + 1.2;
             p.vx = Math.cos(angle) * force;
             p.vy = Math.sin(angle) * force;
             p.dispersed = true;
@@ -218,14 +221,14 @@ export const ParticleBackground: React.FC = () => {
             const dy = p.y - mouseRef.current.y;
             const dist = Math.sqrt(dx * dx + dy * dy);
 
-            if (dist < 110) {
-              const force = (110 - dist) / 110;
-              p.vx += (dx / dist) * force * 0.35;
-              p.vy += (dy / dist) * force * 0.35;
+            if (dist < 130) {
+              const force = (130 - dist) / 130;
+              p.vx += (dx / dist) * force * 0.45;
+              p.vy += (dy / dist) * force * 0.45;
             }
 
-            p.vx *= 0.98;
-            p.vy *= 0.98;
+            p.vx *= 0.97;
+            p.vy *= 0.97;
 
             p.x += p.vx;
             p.y += p.vy;
@@ -236,13 +239,17 @@ export const ParticleBackground: React.FC = () => {
             if (p.y > height + 20) p.y = -20;
           }
 
-          // Render character
-          ctx.font = `${p.size}px 'JetBrains Mono', 'Courier New', monospace`;
-          ctx.fillStyle = `rgba(${textColor}, ${p.alpha})`;
+          // Render glowing code character
+          ctx.save();
+          ctx.font = `bold ${p.size}px 'JetBrains Mono', 'Courier New', monospace`;
+          ctx.fillStyle = `rgba(${textColor}, ${isAssembling ? 0.85 : p.alpha})`;
+          ctx.shadowBlur = isDark ? 8 : 4;
+          ctx.shadowColor = glowColor;
           ctx.fillText(p.char, p.x, p.y);
+          ctx.restore();
 
           // Random character mutation
-          if (Math.random() < 0.005) {
+          if (Math.random() < 0.006) {
             p.char = PARTICLE_CHARS[Math.floor(Math.random() * PARTICLE_CHARS.length)];
           }
         }
@@ -255,9 +262,9 @@ export const ParticleBackground: React.FC = () => {
             const dx = a.x - b.x;
             const dy = a.y - b.y;
             const dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < 110) {
-              ctx.strokeStyle = `rgba(${textColor}, ${0.1 * (1 - dist / 110)})`;
-              ctx.lineWidth = 0.5;
+            if (dist < 125) {
+              ctx.strokeStyle = `rgba(${textColor}, ${0.35 * (1 - dist / 125)})`;
+              ctx.lineWidth = 0.75;
               ctx.beginPath();
               ctx.moveTo(a.x, a.y);
               ctx.lineTo(b.x, b.y);
