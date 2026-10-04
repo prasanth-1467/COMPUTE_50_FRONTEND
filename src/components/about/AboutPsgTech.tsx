@@ -10,7 +10,7 @@ export const AboutPsgTech: React.FC = () => {
     'Est. 1951',
     '21 UG + 24 PG programmes',
     'ARIIA 2021: Rank 2',
-    'G20 Outreach: 1 of 75 institutions',
+    'G20 Outreach: 1 of 75',
   ];
 
   const psgParagraphs = [
@@ -26,44 +26,46 @@ export const AboutPsgTech: React.FC = () => {
   return (
     <Card className="h-full flex flex-col justify-between space-y-6">
       <div className="space-y-5">
-        {/* Header */}
-        <div className="flex items-center gap-3 text-[var(--accent)] border-b border-[var(--border-color)] pb-3">
-          <Building2 className="w-7 h-7 shrink-0" />
-          <h3 className="text-xl font-bold text-[var(--text-primary)]">About PSG College of Technology</h3>
+        {/* Header - One Line Aligned Header */}
+        <div className="flex items-center gap-3 text-[var(--accent)] border-b border-[var(--border-color)] pb-3 min-h-[44px]">
+          <Building2 className="w-6 h-6 shrink-0" />
+          <h3 className="text-xl font-bold text-[var(--text-primary)]">
+            About PSG College of Technology
+          </h3>
         </div>
 
-        {/* Highlight Chips */}
+        {/* Stats / Chips moved to top as large numerals / chips */}
         <div className="flex flex-wrap gap-2 pt-1">
           {psgChips.map((chip, idx) => (
             <Badge
               key={idx}
               variant="outline"
-              className="text-xs font-semibold px-2.5 py-1 bg-[var(--bg-secondary)] border-[var(--border-color)] text-[var(--text-primary)]"
+              className="text-xs font-semibold px-2.5 py-1 bg-[var(--bg-secondary)] border-[var(--border-color)] text-[var(--text-primary)] font-mono"
             >
               {chip}
             </Badge>
           ))}
         </div>
 
-        {/* Paragraphs with spacing 14px and leading 1.7 */}
-        <div className="space-y-4 text-[15px] text-[var(--text-primary)]/85 dark:text-zinc-300 leading-[1.7]">
-          {/* Always show first 2 paragraphs */}
+        {/* Collapsible Paragraphs */}
+        <div className="space-y-4 text-[14px] sm:text-[15px] text-[var(--text-primary)]/85 dark:text-zinc-300 leading-[1.7]">
           <p>{psgParagraphs[0]}</p>
           <p>{psgParagraphs[1]}</p>
 
-          {/* Desktop shows all 4; Mobile toggles 3 & 4 */}
-          <div className={`${isExpanded ? 'block' : 'hidden sm:block'} space-y-4`}>
-            <p>{psgParagraphs[2]}</p>
-            <p>{psgParagraphs[3]}</p>
-          </div>
+          {isExpanded && (
+            <div className="space-y-4 animate-fadeIn">
+              <p>{psgParagraphs[2]}</p>
+              <p>{psgParagraphs[3]}</p>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Mobile Toggle Button */}
-      <div className="sm:hidden pt-2">
+      {/* Read More Toggle */}
+      <div className="pt-4 border-t border-[var(--border-color)] mt-auto">
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--accent)] hover:underline focus:outline-none"
+          className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-[var(--accent)] hover:underline focus:outline-none cursor-pointer"
         >
           <span>{isExpanded ? 'Show less' : 'Read more'}</span>
           {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}

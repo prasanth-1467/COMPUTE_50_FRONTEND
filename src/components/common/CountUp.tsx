@@ -14,7 +14,7 @@ export const CountUp: React.FC<CountUpProps> = ({
   end,
   prefix = '',
   suffix = '',
-  duration = 1.5,
+  duration = 1.8,
   className = '',
   formatNumber,
 }) => {

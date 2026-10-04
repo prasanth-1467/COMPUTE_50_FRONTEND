@@ -7,6 +7,8 @@ export interface DecryptTextProps {
   scrambleChars?: string;
   highlightText?: string;
   highlightClassName?: string;
+  animateOnce?: boolean;
+  sessionKey?: string;
   onComplete?: () => void;
 }
 
@@ -19,17 +21,20 @@ export const DecryptText: React.FC<DecryptTextProps> = ({
   scrambleChars = DEFAULT_HEX_SCRAMBLE,
   highlightText,
   highlightClassName = 'text-[var(--accent)]',
+  animateOnce = false,
+  sessionKey = 'compute50_decrypt_ran',
   onComplete,
 }) => {
-  const hasRunInSession =
+  const prefersReducedMotion =
     typeof window !== 'undefined' &&
-    sessionStorage.getItem('compute50_hero_scramble_ran') === 'true';
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const hasRunInSession =
+    animateOnce &&
+    typeof window !== 'undefined' &&
+    sessionStorage.getItem(sessionKey) === 'true';
 
   const [displayText, setDisplayText] = useState<string[]>(() => {
-    const prefersReducedMotion =
-      typeof window !== 'undefined' &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
     if (prefersReducedMotion || hasRunInSession) {
       return text.split('');
     }
@@ -40,10 +45,6 @@ export const DecryptText: React.FC<DecryptTextProps> = ({
   });
 
   const [settledIndices, setSettledIndices] = useState<Set<number>>(() => {
-    const prefersReducedMotion =
-      typeof window !== 'undefined' &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
     if (prefersReducedMotion || hasRunInSession) {
       return new Set(text.split('').map((_, i) => i));
     }
@@ -55,10 +56,6 @@ export const DecryptText: React.FC<DecryptTextProps> = ({
   });
 
   useEffect(() => {
-    const prefersReducedMotion =
-      typeof window !== 'undefined' &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
     if (prefersReducedMotion || hasRunInSession) {
       setDisplayText(text.split(''));
       setSettledIndices(new Set(text.split('').map((_, i) => i)));
@@ -70,7 +67,7 @@ export const DecryptText: React.FC<DecryptTextProps> = ({
     let iteration = 0;
     const totalChars = text.length;
     const baseStepsPerChar = 3;
-    const initialDelaySteps = 5;
+    const initialDelaySteps = 3;
 
     let lastTime = performance.now();
 
@@ -107,10 +104,12 @@ export const DecryptText: React.FC<DecryptTextProps> = ({
         setSettledIndices(nextSettled);
 
         if (allSettled) {
-          try {
-            sessionStorage.setItem('compute50_hero_scramble_ran', 'true');
-          } catch {
-            // ignore quota or security exceptions
+          if (animateOnce && typeof window !== 'undefined') {
+            try {
+              sessionStorage.setItem(sessionKey, 'true');
+            } catch {
+              // ignore quota or security exceptions
+            }
           }
           onComplete?.();
           return;
@@ -125,7 +124,7 @@ export const DecryptText: React.FC<DecryptTextProps> = ({
     return () => {
       if (frameId) cancelAnimationFrame(frameId);
     };
-  }, [text, speed, scrambleChars, onComplete, hasRunInSession]);
+  }, [text, speed, scrambleChars, onComplete, hasRunInSession, animateOnce, sessionKey, prefersReducedMotion]);
 
   const highlightStart = highlightText ? text.indexOf(highlightText) : -1;
   const highlightEnd =
@@ -179,3 +178,4 @@ export const DecryptText: React.FC<DecryptTextProps> = ({
     </span>
   );
 };
+
