@@ -11,7 +11,7 @@ import { EmptyState } from '../common/EmptyState';
 
 export const EventsSection: React.FC = () => {
   return (
-    <section id="events" className="py-20 md:py-28 bg-[var(--bg-main)] border-b border-[var(--border-color)] transition-colors">
+    <section id="events" className="py-16 md:py-24 bg-[var(--bg-main)] border-b border-[var(--border-color)] transition-colors">
       <Container size="lg">
         <Reveal>
           <SectionHeading

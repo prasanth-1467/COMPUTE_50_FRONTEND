@@ -14,6 +14,7 @@ export const LoginForm: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
+  const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({});
   const [loading, setLoading] = useState<boolean>(false);
 
   const { login } = useAuth();
@@ -23,9 +24,30 @@ export const LoginForm: React.FC = () => {
 
   const from = (location.state as { from?: { pathname?: string } })?.from?.pathname || '/profile';
 
+  const validateForm = () => {
+    const errors: { email?: string; password?: string } = {};
+    if (!email) {
+      errors.email = 'Email address is required';
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      errors.email = 'Please enter a valid email address';
+    }
+    if (!password) {
+      errors.password = 'Password is required';
+    } else if (password.length < 6) {
+      errors.password = 'Password must be at least 6 characters';
+    }
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    if (!validateForm()) {
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -52,14 +74,14 @@ export const LoginForm: React.FC = () => {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="w-full max-w-lg mx-auto">
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold text-[var(--text-primary)]">Welcome Back</h2>
         <p className="text-xs text-[var(--text-secondary)] mt-1">Sign in to manage your team & profile</p>
       </div>
 
       {error && (
-        <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-xs text-red-400 text-center">
+        <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-xs font-medium text-red-600 dark:text-red-400 text-center">
           {error}
         </div>
       )}
@@ -70,7 +92,11 @@ export const LoginForm: React.FC = () => {
           type="email"
           placeholder="student@psgtech.ac.in"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            if (fieldErrors.email) setFieldErrors({ ...fieldErrors, email: undefined });
+          }}
+          error={fieldErrors.email}
           leftIcon={<Mail className="w-4 h-4" />}
           required
         />
@@ -81,7 +107,11 @@ export const LoginForm: React.FC = () => {
             type={showPassword ? 'text' : 'password'}
             placeholder="••••••••"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              if (fieldErrors.password) setFieldErrors({ ...fieldErrors, password: undefined });
+            }}
+            error={fieldErrors.password}
             leftIcon={<Lock className="w-4 h-4" />}
             rightIcon={
               <button
@@ -101,7 +131,7 @@ export const LoginForm: React.FC = () => {
               onClick={() => {
                 addToast('Password reset instructions sent to your email.', 'info');
               }}
-              className="text-xs text-[var(--accent)] hover:underline cursor-pointer"
+              className="text-xs text-lime-800 dark:text-[var(--accent)] hover:underline cursor-pointer font-medium"
             >
               Forgot password?
             </button>
@@ -139,7 +169,7 @@ export const LoginForm: React.FC = () => {
 
       <p className="text-xs text-[var(--text-secondary)] text-center mt-6">
         Don't have an account?{' '}
-        <Link to="/register" className="text-[var(--accent)] hover:underline font-semibold">
+        <Link to="/register" className="text-lime-800 dark:text-[var(--accent)] hover:underline font-bold">
           Register
         </Link>
       </p>

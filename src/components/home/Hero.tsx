@@ -75,15 +75,15 @@ export const Hero: React.FC = () => {
     visible: shouldReduceMotion
       ? { opacity: 1 }
       : {
-          opacity: 1,
-          y: 0,
-          filter: 'blur(0px)',
-          transition: {
-            duration: 0.65,
-            ease: MOTION_EASE,
-            delay: 0.25,
-          },
+        opacity: 1,
+        y: 0,
+        filter: 'blur(0px)',
+        transition: {
+          duration: 0.65,
+          ease: MOTION_EASE,
+          delay: 0.25,
         },
+      },
   };
 
   return (

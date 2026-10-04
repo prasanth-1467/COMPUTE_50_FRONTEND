@@ -21,6 +21,7 @@ export const RegisterForm: React.FC = () => {
     password: '',
   });
 
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -29,7 +30,36 @@ export const RegisterForm: React.FC = () => {
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (fieldErrors[name]) {
+      setFieldErrors((prev) => ({ ...prev, [name]: '' }));
+    }
+  };
+
+  const validateForm = () => {
+    const errors: Record<string, string> = {};
+    if (!formData.name.trim()) errors.name = 'Full name is required';
+    if (!formData.email.trim()) {
+      errors.email = 'Email address is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      errors.email = 'Please enter a valid email address';
+    }
+    if (!formData.phone.trim()) {
+      errors.phone = 'Phone number is required';
+    } else if (formData.phone.replace(/\D/g, '').length < 10) {
+      errors.phone = 'Please enter a valid 10-digit phone number';
+    }
+    if (!formData.college.trim()) errors.college = 'College or Institution is required';
+    if (!formData.department.trim()) errors.department = 'Department is required';
+    if (!formData.password) {
+      errors.password = 'Password is required';
+    } else if (formData.password.length < 6) {
+      errors.password = 'Password must be at least 6 characters';
+    }
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   const fireConfetti = () => {
@@ -53,6 +83,11 @@ export const RegisterForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    if (!validateForm()) {
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -97,7 +132,7 @@ export const RegisterForm: React.FC = () => {
       </div>
 
       {error && (
-        <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-xs text-red-400 text-center">
+        <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-xs font-medium text-red-600 dark:text-red-400 text-center">
           {error}
         </div>
       )}
@@ -106,13 +141,15 @@ export const RegisterForm: React.FC = () => {
         <Input
           label="Full Name"
           name="name"
-          placeholder="Alex Rivera"
+          placeholder="e.g. Alex Rivera"
           value={formData.name}
           onChange={handleChange}
+          error={fieldErrors.name}
           leftIcon={<User className="w-4 h-4" />}
           required
         />
 
+        {/* Stack 1-column on mobile (<640px), 2-column on sm+ */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input
             label="Email Address"
@@ -121,6 +158,7 @@ export const RegisterForm: React.FC = () => {
             placeholder="student@college.edu"
             value={formData.email}
             onChange={handleChange}
+            error={fieldErrors.email}
             leftIcon={<Mail className="w-4 h-4" />}
             required
           />
@@ -132,6 +170,7 @@ export const RegisterForm: React.FC = () => {
             placeholder="+91 9876543210"
             value={formData.phone}
             onChange={handleChange}
+            error={fieldErrors.phone}
             leftIcon={<Phone className="w-4 h-4" />}
             required
           />
@@ -143,17 +182,20 @@ export const RegisterForm: React.FC = () => {
           placeholder="PSG College of Technology"
           value={formData.college}
           onChange={handleChange}
+          error={fieldErrors.college}
           leftIcon={<Building className="w-4 h-4" />}
           required
         />
 
+        {/* Stack 1-column on mobile (<640px), 2-column on sm+ */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input
             label="Department"
             name="department"
-            placeholder="Computer Science & Engineering"
+            placeholder="e.g. Computer Science"
             value={formData.department}
             onChange={handleChange}
+            error={fieldErrors.department}
             leftIcon={<BookOpen className="w-4 h-4" />}
             required
           />
@@ -161,14 +203,14 @@ export const RegisterForm: React.FC = () => {
           <div className="space-y-1.5 text-left">
             <label className="block text-sm font-medium text-[var(--text-primary)]">Year of Study</label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[var(--text-secondary)]">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-zinc-500 dark:text-zinc-400">
                 <Calendar className="w-4 h-4" />
               </div>
               <select
                 name="year"
                 value={formData.year}
                 onChange={handleChange}
-                className="block w-full rounded-lg bg-[var(--bg-surface)] border border-[var(--border-color)] text-[var(--text-primary)] text-sm pl-10 pr-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[var(--accent)] cursor-pointer transition-colors"
+                className="block w-full rounded-lg bg-[var(--bg-surface)] border border-zinc-300 dark:border-[var(--border-color)] text-[var(--text-primary)] text-sm pl-10 pr-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[var(--accent)] cursor-pointer transition-colors"
               >
                 <option value="1st Year">1st Year</option>
                 <option value="2nd Year">2nd Year</option>
@@ -188,6 +230,7 @@ export const RegisterForm: React.FC = () => {
             placeholder="••••••••"
             value={formData.password}
             onChange={handleChange}
+            error={fieldErrors.password}
             leftIcon={<Lock className="w-4 h-4" />}
             required
           />
@@ -225,7 +268,7 @@ export const RegisterForm: React.FC = () => {
 
       <p className="text-xs text-[var(--text-secondary)] text-center mt-6">
         Already registered?{' '}
-        <Link to="/login" className="text-[var(--accent)] hover:underline font-semibold">
+        <Link to="/login" className="text-lime-800 dark:text-[var(--accent)] hover:underline font-bold">
           Login here
         </Link>
       </p>

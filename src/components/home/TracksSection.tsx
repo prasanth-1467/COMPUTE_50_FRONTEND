@@ -25,7 +25,7 @@ export const TracksSection: React.FC = () => {
   };
 
   return (
-    <section id="tracks" className="py-20 md:py-28 bg-[var(--bg-secondary)] border-b border-[var(--border-color)] transition-colors">
+    <section id="tracks" className="py-16 md:py-24 bg-[var(--bg-secondary)] border-b border-[var(--border-color)] transition-colors">
       <Container size="lg">
         <Reveal>
           <SectionHeading

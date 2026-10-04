@@ -21,12 +21,16 @@ export const DecryptText: React.FC<DecryptTextProps> = ({
   highlightClassName = 'text-[var(--accent)]',
   onComplete,
 }) => {
+  const hasRunInSession =
+    typeof window !== 'undefined' &&
+    sessionStorage.getItem('compute50_hero_scramble_ran') === 'true';
+
   const [displayText, setDisplayText] = useState<string[]>(() => {
     const prefersReducedMotion =
       typeof window !== 'undefined' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    if (prefersReducedMotion) {
+    if (prefersReducedMotion || hasRunInSession) {
       return text.split('');
     }
     return text.split('').map((char) => {
@@ -40,7 +44,7 @@ export const DecryptText: React.FC<DecryptTextProps> = ({
       typeof window !== 'undefined' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    if (prefersReducedMotion) {
+    if (prefersReducedMotion || hasRunInSession) {
       return new Set(text.split('').map((_, i) => i));
     }
     const initial = new Set<number>();
@@ -55,7 +59,7 @@ export const DecryptText: React.FC<DecryptTextProps> = ({
       typeof window !== 'undefined' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    if (prefersReducedMotion) {
+    if (prefersReducedMotion || hasRunInSession) {
       setDisplayText(text.split(''));
       setSettledIndices(new Set(text.split('').map((_, i) => i)));
       onComplete?.();
@@ -103,6 +107,11 @@ export const DecryptText: React.FC<DecryptTextProps> = ({
         setSettledIndices(nextSettled);
 
         if (allSettled) {
+          try {
+            sessionStorage.setItem('compute50_hero_scramble_ran', 'true');
+          } catch {
+            // ignore quota or security exceptions
+          }
           onComplete?.();
           return;
         }
@@ -116,7 +125,7 @@ export const DecryptText: React.FC<DecryptTextProps> = ({
     return () => {
       if (frameId) cancelAnimationFrame(frameId);
     };
-  }, [text, speed, scrambleChars, onComplete]);
+  }, [text, speed, scrambleChars, onComplete, hasRunInSession]);
 
   const highlightStart = highlightText ? text.indexOf(highlightText) : -1;
   const highlightEnd =

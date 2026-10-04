@@ -11,7 +11,7 @@ import { Sparkles } from 'lucide-react';
 
 export const SponsorsSection: React.FC = () => {
   return (
-    <section id="sponsors" className="py-20 md:py-28 bg-[var(--bg-secondary)] border-b border-[var(--border-color)] transition-colors">
+    <section id="sponsors" className="py-16 md:py-24 bg-[var(--bg-secondary)] border-b border-[var(--border-color)] transition-colors">
       <Container size="lg">
         <Reveal>
           <SectionHeading

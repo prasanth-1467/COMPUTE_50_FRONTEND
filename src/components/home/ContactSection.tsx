@@ -18,7 +18,7 @@ export const ContactSection: React.FC = () => {
   };
 
   return (
-    <section id="contact" className="py-20 md:py-28 bg-[var(--bg-main)] transition-colors">
+    <section id="contact" className="py-16 md:py-24 bg-[var(--bg-main)] transition-colors">
       <Container size="lg">
         <Reveal>
           <SectionHeading

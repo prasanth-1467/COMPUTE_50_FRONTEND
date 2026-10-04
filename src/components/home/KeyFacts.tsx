@@ -34,7 +34,7 @@ export const KeyFacts: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 bg-[var(--bg-secondary)] border-b border-[var(--border-color)] transition-colors">
+    <section className="py-16 md:py-24 bg-[var(--bg-secondary)] border-b border-[var(--border-color)] transition-colors">
       <Container size="lg">
         <Reveal>
           <SectionHeading

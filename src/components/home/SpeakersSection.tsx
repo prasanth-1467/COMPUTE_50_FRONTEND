@@ -44,7 +44,7 @@ const SpeakerAvatar: React.FC<{ name: string; image?: string }> = ({ name, image
 
 export const SpeakersSection: React.FC = () => {
   return (
-    <section id="speakers" className="py-20 md:py-28 bg-[var(--bg-main)] border-b border-[var(--border-color)] transition-colors">
+    <section id="speakers" className="py-16 md:py-24 bg-[var(--bg-main)] border-b border-[var(--border-color)] transition-colors">
       <Container size="lg">
         <Reveal>
           <SectionHeading

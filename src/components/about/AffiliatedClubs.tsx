@@ -37,6 +37,12 @@ const ClubAvatar: React.FC<{ logo?: string; name: string; abbreviation?: string;
 export const AffiliatedClubs: React.FC = () => {
   const [expandedClub, setExpandedClub] = useState<string | null>(null);
 
+  // Group clubs into pairs of 2 for row-level layout
+  const rows: (typeof clubs)[] = [];
+  for (let i = 0; i < clubs.length; i += 2) {
+    rows.push(clubs.slice(i, i + 2));
+  }
+
   return (
     <div className="space-y-6">
       <div className="text-left space-y-1">
@@ -44,139 +50,168 @@ export const AffiliatedClubs: React.FC = () => {
         <h3 className="text-2xl font-bold text-[var(--text-primary)]">Clubs & Bodies under CSEA</h3>
       </div>
 
-      {/* 2x2 grid on desktop, 1 column on mobile */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
-        {clubs.map((club) => {
-          const isExpanded = expandedClub === club.id;
+      <div className="space-y-6">
+        {rows.map((row, rowIndex) => {
+          const expandedClubObj = row.find((c) => c.id === expandedClub);
 
           return (
-            <Card
-              key={club.id}
-              className="h-full flex flex-col justify-between gap-4 transition-all duration-300"
-            >
-              {/* Card Top Content */}
-              <div className="space-y-3">
-                {/* Header Avatar & Name */}
-                <div className="flex items-center gap-3 border-b border-[var(--border-color)] pb-3">
-                  <ClubAvatar logo={club.logo} name={club.name} abbreviation={club.abbreviation} accent={club.accent} />
+            <div key={rowIndex} className="space-y-4">
+              {/* Cards row */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+                {row.map((club) => {
+                  const isExpanded = expandedClub === club.id;
 
-                  <div className="min-w-0 flex-1">
-                    <h4 className="font-bold text-lg text-[var(--text-primary)] leading-snug">
-                      {club.fullName || club.name}
-                    </h4>
-                    <span className="text-xs font-mono font-semibold text-[var(--text-secondary)]">
-                      {club.name}
-                    </span>
-                  </div>
-                </div>
+                  return (
+                    <Card
+                      key={club.id}
+                      className={`h-full flex flex-col justify-between gap-4 transition-all duration-300 ${
+                        isExpanded ? 'ring-2 ring-[var(--accent)]' : ''
+                      }`}
+                    >
+                      {/* Card Top Content */}
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-3 border-b border-[var(--border-color)] pb-3">
+                          <ClubAvatar logo={club.logo} name={club.name} abbreviation={club.abbreviation} accent={club.accent} />
+                          <div className="min-w-0 flex-1">
+                            <h4 className="font-bold text-lg text-[var(--text-primary)] leading-snug">
+                              {club.fullName || club.name}
+                            </h4>
+                            <span className="text-xs font-mono font-semibold text-[var(--text-secondary)]">
+                              {club.name}
+                            </span>
+                          </div>
+                        </div>
 
-                {/* 1-Sentence Summary on Card Body */}
-                <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed font-medium">
-                  {club.summary || club.description}
-                </p>
-
-                {/* Expanded Full Description & Details */}
-                {isExpanded && (
-                  <div className="mt-3 pt-3 border-t border-[var(--border-color)] space-y-4 animate-fadeIn text-left">
-                    <div className="space-y-1.5">
-                      <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent)] font-mono">
-                        About {club.name}
-                      </span>
-                      <p className="text-[14px] text-[var(--text-primary)]/85 dark:text-zinc-300 leading-relaxed">
-                        {club.description}
-                      </p>
-                    </div>
-
-                    {/* E-CELL Rich Details */}
-                    {club.details && (
-                      <div className="space-y-4 pt-1">
-                        <p className="text-[13px] text-[var(--text-secondary)] leading-relaxed italic bg-[var(--bg-secondary)] p-3 rounded-xl border border-[var(--border-color)]">
-                          "{club.details.intro}"
+                        <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed font-medium">
+                          {club.summary || club.description}
                         </p>
+                      </div>
 
-                        {/* Our Approach */}
-                        <div className="space-y-2">
-                          <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent)] flex items-center gap-1.5 font-mono">
-                            <Rocket className="w-3.5 h-3.5" /> Our Approach
-                          </span>
-                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                            {club.details.approach.map((item, idx) => (
-                              <div key={idx} className="p-2.5 bg-[var(--bg-secondary)] rounded-lg border border-[var(--border-color)] space-y-0.5">
-                                <span className="font-bold text-xs text-[var(--text-primary)] block">
-                                  {item.title}
-                                </span>
-                                <p className="text-[11px] text-[var(--text-secondary)] leading-normal">
-                                  {item.text}
-                                </p>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
+                      {/* Fixed Footer Row */}
+                      <div className="pt-3 border-t border-[var(--border-color)] flex items-center justify-between gap-2 mt-auto">
+                        <button
+                          onClick={() => setExpandedClub(isExpanded ? null : club.id)}
+                          className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--accent)] hover:underline focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/50 rounded px-1.5 py-1"
+                          aria-expanded={isExpanded}
+                        >
+                          <span>{isExpanded ? 'Hide details' : 'Learn more'}</span>
+                          {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                        </button>
 
-                        {/* What E-Cell Works Towards */}
-                        <div className="space-y-2">
-                          <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent)] flex items-center gap-1.5 font-mono">
-                            <Target className="w-3.5 h-3.5" /> Works Towards
-                          </span>
-                          <ul className="space-y-1 text-xs text-[var(--text-secondary)]">
-                            {club.details.worksTowards.map((point, idx) => (
-                              <li key={idx} className="flex items-start gap-2 bg-[var(--bg-secondary)] p-2 rounded-lg border border-[var(--border-color)] leading-normal">
-                                <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] mt-1.5 shrink-0" />
-                                <span>{point}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
+                        {club.url ? (
+                          <a
+                            href={club.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold text-[var(--text-primary)] hover:text-[var(--accent)] bg-[var(--bg-secondary)] hover:bg-[var(--accent-muted)] border border-[var(--border-color)] hover:border-[var(--accent)] rounded-lg transition-colors shrink-0"
+                            aria-label={`Explore ${club.name}`}
+                          >
+                            <span>Explore</span>
+                            <ExternalLink className="w-3.5 h-3.5" />
+                          </a>
+                        ) : null}
+                      </div>
+                    </Card>
+                  );
+                })}
+              </div>
 
-                        {/* Who It's For */}
-                        <div className="space-y-2">
-                          <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent)] flex items-center gap-1.5 font-mono">
-                            <Users className="w-3.5 h-3.5" /> Who It's For
-                          </span>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                            {club.details.whoItsFor.map((persona, idx) => (
-                              <div key={idx} className="p-2.5 bg-[var(--bg-secondary)] rounded-lg border border-[var(--border-color)] space-y-0.5">
-                                <span className="font-semibold text-xs text-[var(--text-primary)] block">
-                                  {persona.title}
-                                </span>
-                                <p className="text-[11px] text-[var(--text-secondary)] leading-normal">
-                                  {persona.text}
-                                </p>
-                              </div>
-                            ))}
-                          </div>
+              {/* Full-width expanded panel under the row */}
+              {expandedClubObj && (
+                <div className="w-full bg-[var(--bg-secondary)] border border-[var(--accent)]/30 rounded-2xl p-6 space-y-4 animate-fadeIn shadow-lg text-left">
+                  <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3">
+                    <div className="flex items-center gap-3">
+                      <ClubAvatar
+                        logo={expandedClubObj.logo}
+                        name={expandedClubObj.name}
+                        abbreviation={expandedClubObj.abbreviation}
+                        accent={expandedClubObj.accent}
+                      />
+                      <div>
+                        <h4 className="font-bold text-lg text-[var(--text-primary)] font-mono">
+                          About {expandedClubObj.name}
+                        </h4>
+                        <span className="text-xs text-[var(--text-secondary)]">
+                          {expandedClubObj.fullName || expandedClubObj.name}
+                        </span>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setExpandedClub(null)}
+                      className="px-3 py-1 rounded-lg text-xs font-mono font-bold border border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] transition-colors"
+                    >
+                      Close ✕
+                    </button>
+                  </div>
+
+                  <p className="text-[14px] text-[var(--text-primary)]/85 dark:text-zinc-300 leading-relaxed font-medium">
+                    {expandedClubObj.description}
+                  </p>
+
+                  {/* E-CELL Rich Details */}
+                  {expandedClubObj.details && (
+                    <div className="space-y-4 pt-2">
+                      <p className="text-[13px] text-[var(--text-secondary)] leading-relaxed italic bg-[var(--bg-tertiary)] p-3 rounded-xl border border-[var(--border-color)]">
+                        "{expandedClubObj.details.intro}"
+                      </p>
+
+                      {/* Our Approach */}
+                      <div className="space-y-2">
+                        <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent)] flex items-center gap-1.5 font-mono">
+                          <Rocket className="w-3.5 h-3.5" /> Our Approach
+                        </span>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                          {expandedClubObj.details.approach.map((item, idx) => (
+                            <div key={idx} className="p-3 bg-[var(--bg-tertiary)] rounded-xl border border-[var(--border-color)] space-y-1">
+                              <span className="font-bold text-xs text-[var(--text-primary)] block">
+                                {item.title}
+                              </span>
+                              <p className="text-[12px] text-[var(--text-secondary)] leading-normal">
+                                {item.text}
+                              </p>
+                            </div>
+                          ))}
                         </div>
                       </div>
-                    )}
-                  </div>
-                )}
-              </div>
 
-              {/* Fixed Footer Row */}
-              <div className="pt-3 border-t border-[var(--border-color)] flex items-center justify-between gap-2 mt-auto">
-                <button
-                  onClick={() => setExpandedClub(isExpanded ? null : club.id)}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--accent)] hover:underline focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/50 rounded px-1.5 py-1"
-                  aria-expanded={isExpanded}
-                >
-                  <span>{isExpanded ? 'Show less' : 'Learn more'}</span>
-                  {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
-                </button>
+                      {/* What E-Cell Works Towards */}
+                      <div className="space-y-2">
+                        <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent)] flex items-center gap-1.5 font-mono">
+                          <Target className="w-3.5 h-3.5" /> Works Towards
+                        </span>
+                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[var(--text-secondary)]">
+                          {expandedClubObj.details.worksTowards.map((point, idx) => (
+                            <li key={idx} className="flex items-start gap-2 bg-[var(--bg-tertiary)] p-2.5 rounded-xl border border-[var(--border-color)] leading-normal">
+                              <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] mt-1.5 shrink-0" />
+                              <span>{point}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
 
-                {club.url ? (
-                  <a
-                    href={club.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold text-[var(--text-primary)] hover:text-[var(--accent)] bg-[var(--bg-secondary)] hover:bg-[var(--accent-muted)] border border-[var(--border-color)] hover:border-[var(--accent)] rounded-lg transition-colors shrink-0"
-                    aria-label={`Explore ${club.name}`}
-                  >
-                    <span>Explore</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-                ) : null}
-              </div>
-            </Card>
+                      {/* Who It's For */}
+                      <div className="space-y-2">
+                        <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent)] flex items-center gap-1.5 font-mono">
+                          <Users className="w-3.5 h-3.5" /> Who It's For
+                        </span>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          {expandedClubObj.details.whoItsFor.map((persona, idx) => (
+                            <div key={idx} className="p-3 bg-[var(--bg-tertiary)] rounded-xl border border-[var(--border-color)] space-y-1">
+                              <span className="font-semibold text-xs text-[var(--text-primary)] block">
+                                {persona.title}
+                              </span>
+                              <p className="text-[12px] text-[var(--text-secondary)] leading-normal">
+                                {persona.text}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           );
         })}
       </div>

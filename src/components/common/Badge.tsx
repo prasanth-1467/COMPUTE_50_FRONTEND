@@ -14,13 +14,13 @@ export const Badge: React.FC<BadgeProps> = ({
   className = '',
 }) => {
   const variantStyles = {
-    primary: 'bg-[var(--accent-muted)] text-[var(--accent)] border border-[var(--accent)]/30 font-mono',
+    primary: 'bg-[var(--accent-muted)] text-[var(--accent)] border border-[var(--accent)]/40 font-mono font-semibold',
     secondary: 'bg-[var(--bg-secondary)] text-[var(--text-primary)] border border-[var(--border-color)]',
-    success: 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20',
-    warning: 'bg-amber-500/10 text-amber-400 border border-amber-500/20',
-    error: 'bg-red-500/10 text-red-400 border border-red-500/20',
-    info: 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20',
-    outline: 'bg-transparent text-[var(--text-primary)] border border-[var(--border-color)]',
+    success: 'bg-emerald-500/15 text-emerald-800 dark:text-emerald-400 border border-emerald-500/30 font-semibold',
+    warning: 'bg-amber-500/15 text-amber-900 dark:text-amber-300 border border-amber-500/30 font-semibold',
+    error: 'bg-red-500/15 text-red-800 dark:text-red-400 border border-red-500/30 font-semibold',
+    info: 'bg-cyan-500/15 text-cyan-900 dark:text-cyan-300 border border-cyan-500/30 font-semibold',
+    outline: 'bg-transparent text-[var(--text-primary)] border border-[var(--border-color)] font-medium',
   };
 
   const sizeStyles = {

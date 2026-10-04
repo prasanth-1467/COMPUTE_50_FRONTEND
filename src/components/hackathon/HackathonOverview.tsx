@@ -2,7 +2,6 @@ import React from 'react';
 import { Card } from '../common/Card';
 import { Badge } from '../common/Badge';
 import { Award, Users, MapPin, Trophy } from 'lucide-react';
-import { aboutCompute50 } from '../../data/content';
 
 export const HackathonOverview: React.FC = () => {
   return (
@@ -16,7 +15,7 @@ export const HackathonOverview: React.FC = () => {
       </div>
 
       <p className="text-[15px] text-[var(--text-secondary)] leading-relaxed">
-        {aboutCompute50}
+        COMPUTE 50 HACKATHON brings together students from diverse academic backgrounds to identify real-world problems and engineer technology-driven solutions during a two-day national event.
       </p>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
