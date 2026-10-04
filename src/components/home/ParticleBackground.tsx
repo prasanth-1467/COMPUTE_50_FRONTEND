@@ -134,8 +134,8 @@ export const ParticleBackground: React.FC = () => {
           targetY: target.y,
           vx: (Math.random() - 0.5) * 0.5,
           vy: (Math.random() - 0.5) * 0.5,
-          size: Math.random() * 10 + 13, // Boosted size: 13px - 23px
-          alpha: Math.random() * 0.35 + 0.45, // Boosted alpha: 0.45 - 0.80
+          size: Math.random() * 10 + 13,
+          alpha: Math.random() * 0.35 + 0.45,
           char: PARTICLE_CHARS[Math.floor(Math.random() * PARTICLE_CHARS.length)],
           dispersed: false,
         };
@@ -205,7 +205,7 @@ export const ParticleBackground: React.FC = () => {
           if (isAssembling) {
             // Smooth lerp to target "50" points
             const progress = Math.min(1, timeSinceStart / 1000);
-            const easeProgress = 1 - Math.pow(1 - progress, 3); // Cubic ease-out
+            const easeProgress = 1 - Math.pow(1 - progress, 3);
             p.x = p.startX + (p.targetX - p.startX) * easeProgress;
             p.y = p.startY + (p.targetY - p.startY) * easeProgress;
           } else if (isDispersing && !p.dispersed) {
