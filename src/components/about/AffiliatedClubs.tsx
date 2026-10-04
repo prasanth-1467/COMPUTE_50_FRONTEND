@@ -11,25 +11,27 @@ const ClubAvatar: React.FC<{ logo?: string; name: string; abbreviation?: string;
   accent,
 }) => {
   const [hasError, setHasError] = useState(false);
-  const initials = abbreviation || name.slice(0, 4);
+  const initials = abbreviation || name;
 
   if (logo && !hasError) {
     return (
-      <img
-        src={logo}
-        alt={name}
-        onError={() => setHasError(true)}
-        className="w-11 h-11 rounded-xl border border-[var(--border-color)] object-cover bg-[var(--bg-secondary)] shrink-0"
-      />
+      <div className="w-14 h-14 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-1.5 flex items-center justify-center shrink-0 overflow-hidden shadow-xs">
+        <img
+          src={logo}
+          alt={name}
+          onError={() => setHasError(true)}
+          className="w-full h-full object-contain rounded-lg"
+        />
+      </div>
     );
   }
 
   return (
     <div
-      className="w-11 h-11 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] flex items-center justify-center font-mono font-bold text-xs shrink-0"
+      className="w-14 h-14 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] flex items-center justify-center font-mono font-bold p-1 text-[11px] leading-none shrink-0 overflow-hidden text-center shadow-xs"
       style={{ color: accent || 'var(--accent)' }}
     >
-      {initials}
+      <span className="whitespace-nowrap truncate max-w-full px-0.5">{initials}</span>
     </div>
   );
 };
@@ -64,9 +66,10 @@ export const AffiliatedClubs: React.FC = () => {
                   return (
                     <Card
                       key={club.id}
-                      className={`h-full flex flex-col justify-between gap-4 transition-all duration-300 ${
+                      className={`h-full flex flex-col justify-between gap-4 transition-all duration-300 border-t-2 ${
                         isExpanded ? 'ring-2 ring-[var(--accent)]' : ''
                       }`}
+                      style={{ borderTopColor: club.accent || 'var(--accent)' }}
                     >
                       {/* Card Top Content */}
                       <div className="space-y-3">
@@ -91,7 +94,7 @@ export const AffiliatedClubs: React.FC = () => {
                       <div className="pt-3 border-t border-[var(--border-color)] flex items-center justify-between gap-2 mt-auto">
                         <button
                           onClick={() => setExpandedClub(isExpanded ? null : club.id)}
-                          className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--accent)] hover:underline focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/50 rounded px-1.5 py-1"
+                          className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--accent)] hover:underline focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/50 rounded px-1.5 py-1 cursor-pointer"
                           aria-expanded={isExpanded}
                         >
                           <span>{isExpanded ? 'Hide details' : 'Learn more'}</span>
@@ -138,7 +141,7 @@ export const AffiliatedClubs: React.FC = () => {
                     </div>
                     <button
                       onClick={() => setExpandedClub(null)}
-                      className="px-3 py-1 rounded-lg text-xs font-mono font-bold border border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] transition-colors"
+                      className="px-3 py-1 rounded-lg text-xs font-mono font-bold border border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] transition-colors cursor-pointer"
                     >
                       Close ✕
                     </button>

@@ -4,6 +4,8 @@ import { Code2, Globe, Mail, MapPin, Share2 } from 'lucide-react';
 import { Container } from '../common/Container';
 import { EVENT_CONFIG } from '../../config/event';
 
+import compute50Logo from '../../assets/logos/compute 50 logo.png';
+
 export const Footer: React.FC = () => {
   return (
     <footer className="bg-[var(--bg-secondary)] border-t border-[var(--border-color)] pt-12 pb-8 text-[var(--text-secondary)] text-sm transition-colors">
@@ -12,8 +14,8 @@ export const Footer: React.FC = () => {
           {/* Brand info */}
           <div className="space-y-4 md:col-span-1">
             <Link to="/" className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-[var(--accent-muted)] border border-[var(--accent)]/30 flex items-center justify-center text-[var(--accent)]">
-                <Code2 className="w-5 h-5" />
+              <div className="w-9 h-9 rounded-xl bg-white border border-[var(--accent)]/50 p-1 flex items-center justify-center overflow-hidden shadow-sm">
+                <img src={compute50Logo} alt="Compute 50" className="w-full h-full object-contain" />
               </div>
               <span className="font-extrabold text-lg text-[var(--text-primary)] tracking-tight">
                 COMPUTE <span className="text-[var(--accent)]">50</span>

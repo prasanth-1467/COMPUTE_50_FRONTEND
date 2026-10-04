@@ -9,6 +9,7 @@ export const mockSpeakers: Speaker[] = [
     bio: 'Academic director and keynote advisor overseeing advanced computing research and student symposiums.',
     image: '',
     type: 'speaker',
+    confirmed: false,
   },
   {
     id: 'spk-2',
@@ -18,6 +19,7 @@ export const mockSpeakers: Speaker[] = [
     bio: 'Industry veteran with 18+ years leading cloud architecture, microservices, and distributed data at scale.',
     image: '',
     type: 'judge',
+    confirmed: false,
   },
   {
     id: 'spk-3',
@@ -27,6 +29,7 @@ export const mockSpeakers: Speaker[] = [
     bio: 'Specialist in Computer Vision and Edge Inference models. Keynote speaker and open-source AI contributor.',
     image: '',
     type: 'speaker',
+    confirmed: false,
   },
   {
     id: 'spk-4',
@@ -36,6 +39,7 @@ export const mockSpeakers: Speaker[] = [
     bio: 'Hackathon judge specializing in zero-trust cybersecurity protocols, cryptography, and Web3 systems.',
     image: '',
     type: 'judge',
+    confirmed: false,
   },
   {
     id: 'spk-5',
@@ -45,14 +49,17 @@ export const mockSpeakers: Speaker[] = [
     bio: 'Hands-on technical mentor guiding participant teams on product design, scalable APIs, and full-stack UX.',
     image: '',
     type: 'mentor',
+    confirmed: false,
   },
   {
     id: 'spk-6',
-    name: 'Arun Kumar',
-    role: 'Principal Systems Architect',
-    organization: 'HyperScale Mobility',
-    bio: 'Expert in embedded hardware engineering, IoT sensor protocols, and real-time computing pipelines.',
+    name: 'To Be Announced',
+    role: 'Keynote Guest Specialist',
+    organization: 'Leading Tech Enterprise',
+    bio: 'Distinguished industry leader in distributed AI infrastructure.',
     image: '',
-    type: 'mentor',
+    type: 'speaker',
+    confirmed: false,
   },
 ];
+

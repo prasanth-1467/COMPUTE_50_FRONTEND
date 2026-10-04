@@ -7,6 +7,10 @@ import { useTheme } from '../../hooks/useTheme';
 import { Container } from '../common/Container';
 import { Button } from '../common/Button';
 import { EVENT_CONFIG } from '../../config/event';
+import compute50Logo from '../../assets/logos/compute 50 logo.png';
+import psgLogo from '../../assets/logos/psg-logo.png';
+import cseaLogo from '../../assets/logos/csea-logo.png';
+import psg100Logo from '../../assets/logos/psg-100years-logo.png';
 
 export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
@@ -59,11 +63,10 @@ export const Navbar: React.FC = () => {
 
   return (
     <header
-      className={`sticky top-0 z-40 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-[var(--bg-main)]/95 shadow-md backdrop-blur-md border-b border-[var(--border-color)]'
-          : 'bg-[var(--bg-main)]/80 backdrop-blur-xs border-b border-[var(--border-color)]/60'
-      }`}
+      className={`sticky top-0 z-40 transition-all duration-300 ${isScrolled
+        ? 'bg-[var(--bg-main)]/95 shadow-md backdrop-blur-md border-b border-[var(--border-color)]'
+        : 'bg-[var(--bg-main)]/80 backdrop-blur-xs border-b border-[var(--border-color)]/60'
+        }`}
     >
       {/* Scroll Progress Bar */}
       <motion.div
@@ -72,39 +75,38 @@ export const Navbar: React.FC = () => {
       />
 
       <Container size="lg">
-        <div className="flex items-center justify-between h-16 sm:h-20">
-          {/* Logo & Brand */}
+        <div className="flex items-center justify-between h-16 sm:h-20 gap-2">
+          {/* Top Left: Compute 50 Logo & Brand */}
           <Link
             to="/"
-            className="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-[var(--accent)] rounded-xl p-1"
+            className="flex items-center gap-2.5 sm:gap-3 group focus:outline-none focus:ring-2 focus:ring-[var(--accent)] rounded-xl p-1 shrink-0"
             aria-label="Compute 50 Homepage"
           >
-            <div className="w-10 h-10 rounded-xl bg-[var(--accent-muted)] border border-[var(--accent)]/30 flex items-center justify-center text-[var(--accent)] group-hover:scale-105 transition-transform">
-              <Code2 className="w-6 h-6" />
+            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white border border-[var(--accent)]/50 p-1 flex items-center justify-center group-hover:scale-105 transition-transform overflow-hidden shadow-md">
+              <img src={compute50Logo} alt="Compute 50" className="w-full h-full object-contain" />
             </div>
             <div>
-              <span className="font-black text-xl text-[var(--text-primary)] tracking-tight block font-mono">
+              <span className="font-black text-lg sm:text-xl text-[var(--text-primary)] tracking-tight block font-mono leading-none">
                 COMPUTE <span className="text-[var(--accent)]">50</span>
               </span>
-              <span className="text-[10px] text-[var(--text-secondary)] block -mt-1 tracking-wider uppercase font-semibold">
-                CSEA, PSG Tech
+              <span className="text-[10px] text-[var(--text-secondary)] block mt-0.5 tracking-wider uppercase font-semibold">
+                CSEA · PSG Tech
               </span>
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1 bg-[var(--bg-surface)] border border-[var(--border-color)] px-3 py-1.5 rounded-full shadow-xs">
+          {/* Center: Navigation Links */}
+          <nav className="hidden lg:flex items-center gap-1 bg-[var(--bg-surface)] border border-[var(--border-color)] px-3 py-1.5 rounded-full shadow-xs">
             {navLinks.map((link) => {
               const active = isActive(link.path);
               return (
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`relative text-sm font-medium px-4 py-1.5 rounded-full transition-colors ${
-                    active
-                      ? 'text-[var(--accent)] font-semibold'
-                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                  }`}
+                  className={`relative text-sm font-medium px-4 py-1.5 rounded-full transition-colors ${active
+                    ? 'text-[var(--accent)] font-semibold'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                    }`}
                 >
                   {active && (
                     <motion.div
@@ -119,68 +121,93 @@ export const Navbar: React.FC = () => {
             })}
           </nav>
 
-          {/* Desktop Actions & Theme Switch */}
-          <div className="hidden md:flex items-center gap-3">
-            {/* Theme Toggle Button */}
-            <button
-              onClick={toggleTheme}
-              className="min-h-[44px] min-w-[44px] p-2.5 rounded-full border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:border-[var(--accent)] transition-all cursor-pointer flex items-center justify-center"
-              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
-            >
-              <motion.div
-                key={theme}
-                initial={{ scale: 0.6, rotate: -90, opacity: 0 }}
-                animate={{ scale: 1, rotate: 0, opacity: 1 }}
-                transition={{ duration: 0.2 }}
+          {/* Top Right: Institutional Logos & Actions */}
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            {/* Top Right Institutional Logos Row */}
+            <div className="flex items-center gap-3 px-3.5 py-1.5 bg-white border border-slate-200 rounded-xl shadow-md">
+              <img
+                src={psgLogo}
+                alt="PSG Tech"
+                className="h-6 sm:h-7 w-auto object-contain"
+                title="PSG College of Technology"
+              />
+              <div className="h-4 w-[1px] bg-slate-300" />
+              <img
+                src={cseaLogo}
+                alt="CSEA"
+                className="h-6 sm:h-7 w-auto object-contain"
+                title="Computer Science & Engineering Association"
+              />
+              <div className="h-4 w-[1px] bg-slate-300 hidden sm:block" />
+              <img
+                src={psg100Logo}
+                alt="PSG 100 Years"
+                className="h-6 sm:h-7 w-auto object-contain hidden sm:block"
+                title="PSG Centenary"
+              />
+            </div>
+
+            {/* Desktop Theme Switch & Auth Buttons */}
+            <div className="hidden md:flex items-center gap-2">
+              <button
+                onClick={toggleTheme}
+                className="min-h-[40px] min-w-[40px] p-2 rounded-full border border-[var(--border-color)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:border-[var(--accent)] transition-all cursor-pointer flex items-center justify-center"
+                aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+              >
+                <motion.div
+                  key={theme}
+                  initial={{ scale: 0.6, rotate: -90, opacity: 0 }}
+                  animate={{ scale: 1, rotate: 0, opacity: 1 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {theme === 'dark' ? <Sun className="w-4 h-4 text-[var(--accent)]" /> : <Moon className="w-4 h-4 text-[var(--text-primary)]" />}
+                </motion.div>
+              </button>
+
+              {isAuthenticated ? (
+                <Link to="/profile">
+                  <Button
+                    variant={isActive('/profile') ? 'primary' : 'outline'}
+                    size="sm"
+                    leftIcon={<UserIcon className="w-4 h-4" />}
+                  >
+                    {user?.name || 'Profile'}
+                  </Button>
+                </Link>
+              ) : (
+                <>
+                  <Link to="/login">
+                    <Button variant={isActive('/login') ? 'primary' : 'ghost'} size="sm">
+                      Login
+                    </Button>
+                  </Link>
+                  <Link to="/register">
+                    <Button variant={isActive('/register') ? 'primary' : 'outline'} size="sm">
+                      Register
+                    </Button>
+                  </Link>
+                </>
+              )}
+            </div>
+
+            {/* Mobile Actions: Theme Switch & Drawer Toggle */}
+            <div className="flex md:hidden items-center gap-1.5">
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-xl border border-[var(--border-color)] text-[var(--text-primary)] bg-[var(--bg-surface)] cursor-pointer flex items-center justify-center"
+                aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
               >
                 {theme === 'dark' ? <Sun className="w-4 h-4 text-[var(--accent)]" /> : <Moon className="w-4 h-4 text-[var(--text-primary)]" />}
-              </motion.div>
-            </button>
+              </button>
 
-            {isAuthenticated ? (
-              <Link to="/profile">
-                <Button
-                  variant={isActive('/profile') ? 'primary' : 'outline'}
-                  size="sm"
-                  leftIcon={<UserIcon className="w-4 h-4" />}
-                >
-                  {user?.name || 'Profile'}
-                </Button>
-              </Link>
-            ) : (
-              <>
-                <Link to="/login">
-                  <Button variant={isActive('/login') ? 'primary' : 'ghost'} size="sm">
-                    Login
-                  </Button>
-                </Link>
-                <Link to="/register">
-                  <Button variant={isActive('/register') ? 'primary' : 'outline'} size="sm">
-                    Register
-                  </Button>
-                </Link>
-              </>
-            )}
-          </div>
-
-          {/* Mobile Actions & Drawer Trigger */}
-          <div className="flex md:hidden items-center gap-2">
-            <button
-              onClick={toggleTheme}
-              className="min-h-[44px] min-w-[44px] p-2.5 rounded-xl border border-[var(--border-color)] text-[var(--text-primary)] bg-[var(--bg-surface)] cursor-pointer flex items-center justify-center"
-              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
-            >
-              {theme === 'dark' ? <Sun className="w-5 h-5 text-[var(--accent)]" /> : <Moon className="w-5 h-5 text-[var(--text-primary)]" />}
-            </button>
-
-            <button
-              onClick={() => setMobileMenuOpen(true)}
-              className="min-h-[44px] min-w-[44px] p-2.5 rounded-xl text-[var(--text-secondary)] hover:text-[var(--text-primary)] bg-[var(--bg-surface)] border border-[var(--border-color)] transition-colors cursor-pointer flex items-center justify-center"
-              aria-label="Open mobile navigation menu"
-              aria-expanded={mobileMenuOpen}
-            >
-              <Menu className="w-6 h-6" />
-            </button>
+              <button
+                onClick={() => setMobileMenuOpen(true)}
+                className="p-2 rounded-xl border border-[var(--border-color)] text-[var(--text-primary)] bg-[var(--bg-surface)] cursor-pointer flex items-center justify-center"
+                aria-label="Open navigation menu"
+              >
+                <Menu className="w-5 h-5 text-[var(--text-primary)]" />
+              </button>
+            </div>
           </div>
         </div>
       </Container>
@@ -219,8 +246,8 @@ export const Navbar: React.FC = () => {
               <div className="space-y-6">
                 <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-4">
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-lg bg-[var(--accent-muted)] border border-[var(--accent)]/30 flex items-center justify-center text-[var(--accent)] font-mono font-bold text-sm">
-                      C50
+                    <div className="w-8 h-8 rounded-lg bg-[var(--bg-surface)] border border-[var(--accent)]/40 p-1 flex items-center justify-center overflow-hidden">
+                      <img src={compute50Logo} alt="Compute 50" className="w-full h-full object-contain" />
                     </div>
                     <span className="font-bold text-base text-[var(--text-primary)] font-mono">
                       COMPUTE <span className="text-[var(--accent)]">50</span>
@@ -250,11 +277,10 @@ export const Navbar: React.FC = () => {
                         <Link
                           to={link.path}
                           onClick={() => setMobileMenuOpen(false)}
-                          className={`min-h-[44px] flex items-center justify-between px-4 py-3 rounded-xl text-base font-medium transition-all ${
-                            active
-                              ? 'bg-[var(--accent-muted)] text-[var(--accent)] font-bold border border-[var(--accent)]/40 shadow-xs'
-                              : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]'
-                          }`}
+                          className={`min-h-[44px] flex items-center justify-between px-4 py-3 rounded-xl text-base font-medium transition-all ${active
+                            ? 'bg-[var(--accent-muted)] text-[var(--accent)] font-bold border border-[var(--accent)]/40 shadow-xs'
+                            : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]'
+                            }`}
                         >
                           <span>{link.label}</span>
                           <ArrowRight className={`w-4 h-4 transition-transform ${active ? 'translate-x-1 text-[var(--accent)]' : 'opacity-40'}`} />

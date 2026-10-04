@@ -11,13 +11,15 @@ import { StickyMobileRegister } from '../components/layout/StickyMobileRegister'
 import { SectionDotNav } from '../components/common/SectionDotNav';
 
 import { ScrollToTop } from '../components/common/ScrollToTop';
+import { IntroLoader } from '../components/common/IntroLoader';
 
 export const MainLayout: React.FC = () => {
   const location = useLocation();
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <div className="min-h-screen flex flex-col bg-[var(--bg-main)] text-[var(--text-primary)] transition-colors pb-16 md:pb-0 relative overflow-x-hidden">
+    <div className="min-h-screen flex flex-col bg-[var(--bg-main)] text-[var(--text-primary)] transition-colors pb-[140px] md:pb-0 relative overflow-x-hidden">
+      <IntroLoader />
       <ScrollToTop />
       {/* Skip to Main Content Link for Keyboard Accessibility */}
       <a href="#main-content" className="skip-to-content">
@@ -51,7 +53,6 @@ export const MainLayout: React.FC = () => {
 
       <Footer />
       <BackToTop />
-      <StickyMobileRegister />
       <BottomNav />
     </div>
   );

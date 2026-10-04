@@ -14,6 +14,7 @@ export interface Speaker {
   bio: string;
   image: string;
   type: 'speaker' | 'judge' | 'mentor';
+  confirmed?: boolean;
 }
 
 export interface Sponsor {

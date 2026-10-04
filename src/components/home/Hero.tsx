@@ -8,6 +8,9 @@ import { Badge } from '../common/Badge';
 import { useCountdown } from '../../hooks/useCountdown';
 import { DecryptText } from '../common/DecryptText';
 import { MOTION_EASE } from '../../lib/motion';
+import compute50Logo from '../../assets/logos/compute 50 logo.png';
+import psgLogo from '../../assets/logos/psg-logo.png';
+import cseaLogo from '../../assets/logos/csea-logo.png';
 import { EVENT_CONFIG } from '../../config/event';
 import { home } from '../../data/content';
 
@@ -20,7 +23,7 @@ const InstitutionLogo: React.FC<{ name: string; shortName: string; logoSrc: stri
 
   if (hasError) {
     return (
-      <div className="flex items-center gap-2 px-3 py-1.5 bg-[var(--bg-surface)] border border-[var(--border-color)] rounded-lg font-mono text-xs font-semibold text-[var(--text-primary)]">
+      <div className="flex items-center gap-2 px-3 py-1.5 bg-white text-slate-900 border border-slate-200 rounded-lg font-mono text-xs font-semibold shadow-xs">
         <span className="w-2 h-2 rounded-full bg-[var(--accent)]" />
         <span>{shortName}</span>
       </div>
@@ -28,12 +31,12 @@ const InstitutionLogo: React.FC<{ name: string; shortName: string; logoSrc: stri
   }
 
   return (
-    <div className="flex items-center gap-2 px-3 py-1.5 bg-[var(--bg-surface)] border border-[var(--border-color)] rounded-lg font-mono text-xs font-semibold text-[var(--text-primary)]">
+    <div className="flex items-center gap-2.5 px-3 py-1.5 bg-white text-slate-900 border border-slate-200 rounded-xl font-mono text-xs font-semibold shadow-sm">
       <img
         src={logoSrc}
         alt={name}
         onError={() => setHasError(true)}
-        className="h-5 w-auto object-contain"
+        className="h-6 w-auto object-contain"
       />
       <span>{shortName}</span>
     </div>
@@ -230,12 +233,12 @@ export const Hero: React.FC = () => {
               <InstitutionLogo
                 name={EVENT_CONFIG.college}
                 shortName={EVENT_CONFIG.collegeShort}
-                logoSrc="/src/assets/logos/psgtech.png"
+                logoSrc={psgLogo}
               />
               <InstitutionLogo
                 name={EVENT_CONFIG.organizerFull}
                 shortName={EVENT_CONFIG.organizerShort}
-                logoSrc="/src/assets/logos/csea.png"
+                logoSrc={cseaLogo}
               />
             </div>
           </motion.div>
