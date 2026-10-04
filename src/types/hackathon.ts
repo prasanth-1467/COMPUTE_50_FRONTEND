@@ -30,6 +30,7 @@ export interface EventItem {
   description: string;
   date: string;
   type: string;
+  mode?: string;
   status: 'Upcoming' | 'Ongoing' | 'Completed';
 }
 
@@ -49,10 +50,24 @@ export interface ScheduleItem {
   venue: string;
 }
 
+export interface ClubDetails {
+  intro: string;
+  approach: { title: string; text: string }[];
+  worksTowards: string[];
+  whoItsFor: { title: string; text: string }[];
+}
+
 export interface ClubItem {
   id: string;
   name: string;
-  abbreviation: string;
+  abbreviation?: string;
   description: string;
+  summary?: string;
   logo: string;
+  fullName?: string;
+  tagline?: string;
+  url?: string;
+  index?: string;
+  accent?: string;
+  details?: ClubDetails;
 }

@@ -107,7 +107,7 @@ export const Profile: React.FC = () => {
           </Button>
         </div>
 
-        <div className="space-y-8 max-w-5xl mx-auto">
+        <div className="space-y-8">
           <PersonalDetails user={profile.user} onEdit={() => setIsEditModalOpen(true)} />
           <StatusCards
             registrationStatus={profile.registrationStatus}

@@ -6,6 +6,7 @@ import { Input } from '../common/Input';
 import { Button } from '../common/Button';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { Reveal } from '../common/Reveal';
+import { EVENT_CONFIG } from '../../config/event';
 
 export const ContactSection: React.FC = () => {
   const [submitted, setSubmitted] = useState<boolean>(false);
@@ -17,7 +18,7 @@ export const ContactSection: React.FC = () => {
   };
 
   return (
-    <section className="py-20 bg-[var(--bg-main)] transition-colors">
+    <section id="contact" className="py-16 md:py-24 bg-[var(--bg-main)] transition-colors">
       <Container size="lg">
         <Reveal>
           <SectionHeading
@@ -27,22 +28,22 @@ export const ContactSection: React.FC = () => {
           />
         </Reveal>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Contact Details Card */}
           <Reveal delay={0.1}>
             <Card className="flex flex-col justify-between space-y-6 h-full">
               <div>
                 <h3 className="text-xl font-bold text-[var(--text-primary)] mb-4">Contact Information</h3>
-                <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-6">
+                <p className="text-[15px] text-[var(--text-secondary)] leading-relaxed mb-6">
                   Feel free to email or call our organizing team for sponsorship, travel, or registration inquiries.
                 </p>
 
-                <div className="space-y-4 text-xs text-[var(--text-secondary)]">
+                <div className="space-y-4 text-[13px] text-[var(--text-secondary)]">
                   <div className="flex items-start gap-3">
                     <MapPin className="w-5 h-5 text-[var(--accent)] shrink-0 mt-0.5" />
                     <div>
                       <strong className="block text-[var(--text-primary)]">Venue & Address</strong>
-                      <span>Department of CSE, PSG College of Technology, Peelamedu, Coimbatore - 641004</span>
+                      <span>{EVENT_CONFIG.venueFull}</span>
                     </div>
                   </div>
 
@@ -50,7 +51,7 @@ export const ContactSection: React.FC = () => {
                     <Mail className="w-5 h-5 text-[var(--accent)] shrink-0 mt-0.5" />
                     <div>
                       <strong className="block text-[var(--text-primary)]">Email Address</strong>
-                      <span>csea@psgtech.ac.in</span>
+                      <span>{EVENT_CONFIG.contactEmail}</span>
                     </div>
                   </div>
 
@@ -58,13 +59,13 @@ export const ContactSection: React.FC = () => {
                     <Phone className="w-5 h-5 text-[var(--accent)] shrink-0 mt-0.5" />
                     <div>
                       <strong className="block text-[var(--text-primary)]">Student Coordinators</strong>
-                      <span>+91 98765 43210 / +91 91234 56789</span>
+                      <span>{EVENT_CONFIG.contactPhone}</span>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="p-4 bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)] text-xs text-[var(--text-secondary)]">
+              <div className="p-4 bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)] text-[13px] text-[var(--text-secondary)]">
                 <span className="text-[var(--accent)] font-semibold block mb-1">Office Hours</span>
                 <span>Monday – Saturday: 9:00 AM – 6:00 PM IST</span>
               </div>
@@ -78,7 +79,7 @@ export const ContactSection: React.FC = () => {
               {submitted ? (
                 <div className="py-12 text-center text-[var(--accent)] space-y-2">
                   <p className="text-base font-semibold">Thank you for getting in touch!</p>
-                  <p className="text-xs text-[var(--text-secondary)]">We have received your message and will respond shortly.</p>
+                  <p className="text-[13px] text-[var(--text-secondary)]">We have received your message and will respond shortly.</p>
                   <Button
                     variant="outline"
                     size="sm"

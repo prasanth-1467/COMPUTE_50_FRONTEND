@@ -44,7 +44,7 @@ export const ScheduleSection: React.FC = () => {
   };
 
   return (
-    <section className="py-20 bg-transparent border-b border-[var(--border-color)] transition-colors">
+    <section id="schedule" className="py-16 md:py-24 bg-transparent border-b border-[var(--border-color)] transition-colors">
       <Container size="lg">
         <SectionHeading
           badge="TIMELINE"
@@ -59,14 +59,14 @@ export const ScheduleSection: React.FC = () => {
               onClick={() => switchDay('Day 1')}
               className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer relative z-10 ${
                 activeDay === 'Day 1'
-                  ? 'text-black font-bold'
+                  ? 'text-[var(--accent-text)] font-bold'
                   : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
             >
               {activeDay === 'Day 1' && (
                 <motion.div
                   layoutId="scheduleDayTab"
-                  className="absolute inset-0 bg-[#B6FF00] rounded-lg shadow-md"
+                  className="absolute inset-0 bg-[var(--accent)] rounded-lg shadow-xs"
                   transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                 />
               )}
@@ -76,14 +76,14 @@ export const ScheduleSection: React.FC = () => {
               onClick={() => switchDay('Day 2')}
               className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer relative z-10 ${
                 activeDay === 'Day 2'
-                  ? 'text-black font-bold'
+                  ? 'text-[var(--accent-text)] font-bold'
                   : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
             >
               {activeDay === 'Day 2' && (
                 <motion.div
                   layoutId="scheduleDayTab"
-                  className="absolute inset-0 bg-[#B6FF00] rounded-lg shadow-md"
+                  className="absolute inset-0 bg-[var(--accent)] rounded-lg shadow-xs"
                   transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                 />
               )}
@@ -125,16 +125,16 @@ export const ScheduleSection: React.FC = () => {
                 >
                   <Card className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="space-y-1">
-                      <div className="flex items-center gap-3 text-xs text-[var(--accent)] font-mono font-semibold">
+                      <div className="flex items-center gap-3 text-[13px] text-[var(--accent)] font-mono font-semibold">
                         <span className="flex items-center gap-1">
                           <Clock className="w-3.5 h-3.5" />
                           {item.time}
                         </span>
                       </div>
                       <h4 className="text-base font-bold text-[var(--text-primary)]">{item.title}</h4>
-                      <p className="text-xs text-[var(--text-secondary)]">{item.description}</p>
+                      <p className="text-[13px] text-[var(--text-secondary)]">{item.description}</p>
                     </div>
-                    <div className="flex items-center gap-1.5 text-xs text-[var(--text-secondary)] bg-[var(--bg-secondary)] px-3 py-1.5 rounded-lg border border-[var(--border-color)] shrink-0 self-start sm:self-center font-medium">
+                    <div className="flex items-center gap-1.5 text-[13px] text-[var(--text-secondary)] bg-[var(--bg-secondary)] px-3 py-1.5 rounded-lg border border-[var(--border-color)] shrink-0 self-start sm:self-center font-medium">
                       <MapPin className="w-3.5 h-3.5 text-[var(--text-secondary)]" />
                       <span>{item.venue}</span>
                     </div>

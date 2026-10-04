@@ -9,7 +9,7 @@ import { AffiliatedClubs } from '../components/about/AffiliatedClubs';
 
 export const About: React.FC = () => {
   return (
-    <div className="py-16 bg-slate-950 min-h-screen">
+    <div className="py-16 bg-[var(--bg-main)] min-h-screen transition-colors">
       <Container size="lg">
         <SectionHeading
           badge="ABOUT THE EVENT"
@@ -17,10 +17,10 @@ export const About: React.FC = () => {
           subtitle="Learn more about PSG College of Technology, CSEA, and the ethos behind Compute 50."
         />
 
-        <div className="space-y-10 max-w-5xl mx-auto">
+        <div className="space-y-10">
           <EventTheme />
           <AboutCompute50 />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
             <AboutPsgTech />
             <AboutCsea />
           </div>

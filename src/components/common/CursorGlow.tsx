@@ -1,12 +1,26 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 export const CursorGlow: React.FC = () => {
   const glowRef = useRef<HTMLDivElement>(null);
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
   useEffect(() => {
+    // 1. Check prefers-reduced-motion
     const prefersReducedMotion =
+      typeof window !== 'undefined' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) return;
+
+    // 2. Check touch devices (ontouchstart, maxTouchPoints > 0, pointer: coarse)
+    const isTouchDevice =
+      typeof window !== 'undefined' &&
+      ('ontouchstart' in window ||
+        navigator.maxTouchPoints > 0 ||
+        window.matchMedia('(pointer: coarse)').matches);
+
+    if (prefersReducedMotion || isTouchDevice) {
+      setIsDisabled(true);
+      return;
+    }
 
     const glow = glowRef.current;
     if (!glow) return;
@@ -34,21 +48,23 @@ export const CursorGlow: React.FC = () => {
       currentX = lerp(currentX, targetX, 0.1);
       currentY = lerp(currentY, targetY, 0.1);
 
-      glow.style.transform = `translate(${currentX - 200}px, ${currentY - 200}px)`;
+      glow.style.transform = `translate3d(${currentX - 200}px, ${currentY - 200}px, 0)`;
 
       animFrame = requestAnimationFrame(animate);
     };
 
-    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mousemove', handleMouseMove, { passive: true });
     document.addEventListener('mouseleave', handleMouseLeave);
     animFrame = requestAnimationFrame(animate);
 
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseleave', handleMouseLeave);
-      cancelAnimationFrame(animFrame);
+      if (animFrame) cancelAnimationFrame(animFrame);
     };
   }, []);
+
+  if (isDisabled) return null;
 
   return (
     <div
